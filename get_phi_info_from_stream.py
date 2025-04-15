@@ -178,7 +178,11 @@ def load_data_n_body():
 
 
 def get_orbital_poles(df):
-    # r x v in cartesian coordinates
+    """
+    compute the unit vector that points in the direction of r x v for each particle in df
+    this is orthogonal to the instantaneous orbital plane and defines the pole of the orbit
+    needed for constructing a great circle coordinate system
+    """
 
     x, y, z = df["x"].values, df["y"].values, df["z"].values
     vx, vy, vz = df["vx"].values, df["vy"].values, df["vz"].values
@@ -289,9 +293,6 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
         "N-body",
     ]
 
-    for codename in codenames_ordered:
-        print(stream_info_dict[codename].keys())
-
     label_dict = {
         "CHC": "CHC",
         "Chen": "Particle Spray (Chen et al. (2024))",
@@ -312,11 +313,15 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
         ]
     )
 
-    min_phi1, max_phi1 = np.percentile(all_phi1, [1, 99])
-    phi1_bins = np.linspace(min_phi1, max_phi1, 100)
+    n_phi1 = 100
+    min_phi1, max_phi1 = np.percentile(all_phi1, [1.0, 99.0])
+    phi1_bins = np.linspace(min_phi1, max_phi1, n_phi1)
 
-    min_phi2, max_phi2 = np.percentile(all_phi2, [1, 99])
-    phi2_bins = np.linspace(min_phi2, max_phi2, 100)
+    n_phi2 = 100
+    min_phi2, max_phi2 = np.percentile(all_phi2, [1.0, 99.0])
+    phi2_bins = np.linspace(min_phi2, max_phi2, n_phi2)
+
+    n_bins = n_phi1 * n_phi2
 
     zi_dict = {}
     for ax, codename in zip(axs, codenames_ordered):
@@ -349,7 +354,8 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
             extent=(min_phi1, max_phi1, min_phi2, max_phi2),
             origin="lower",
             aspect="auto",
-            cmap="viridis",  # You can change to 'plasma', 'inferno', etc.
+            cmap="jet",  # You can change to 'plasma', 'inferno', etc.
+            norm=LogNorm(vmin=0.01 / n_bins, vmax=10.0 / n_bins),
             alpha=0.9,
         )
 
