@@ -9,10 +9,11 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.colors import LogNorm
 
-from astropy.coordinates import SkyCoord, Galactocentric, ICRS
+import gala.coordinates as gc
+import astropy.coordinates as coord
 import astropy.units as u
 
-from gala.coordinates import GreatCircleICRSFrame
+_ = coord.galactocentric_frame_defaults.set("v4.0")
 
 from scipy.stats import gaussian_kde, ks_2samp
 
@@ -176,75 +177,101 @@ def load_data_n_body():
     return info_dict
 
 
-def get_phi_one_two(df, ref_point_vec):
+def get_orbital_poles(df):
+    # r x v in cartesian coordinates
+
+    x, y, z = df["x"].values, df["y"].values, df["z"].values
+    vx, vy, vz = df["vx"].values, df["vy"].values, df["vz"].values
+
+    pos = np.concatenate(
+        (
+            np.reshape(x, (x.size, 1)),
+            np.reshape(y, (y.size, 1)),
+            np.reshape(z, (z.size, 1)),
+        ),
+        axis=1,
+    )
+    vel = np.concatenate(
+        (
+            np.reshape(vx, (vx.size, 1)),
+            np.reshape(vy, (vy.size, 1)),
+            np.reshape(vz, (vz.size, 1)),
+        ),
+        axis=1,
+    )
+
+    # |r x v|
+    r_cross_v = np.cross(pos, vel, axis=1)
+    r_cross_v_norm = np.linalg.norm(r_cross_v, axis=1)
+
+    # return normalized orbital pole of all particles
+    return r_cross_v.T / r_cross_v_norm
+
+
+def get_phi_info(df, ref_point_vec):
     """
     Compute phi_1 and phi_2 for a given dataframe containing MW phase space (x, y, z, vx, vy, vz),
-    dynamically determining the best rotation plane from the dataset.
+    dynamically determining the best great circle fit from the dataset
 
     Args:
         df (pd.DataFrame): DataFrame with columns ["x", "y", "z", "vx", "vy", "vz"]
         ref_point_vec (tuple): (x, y, z) coordinates of the progenitor in kpc.
-
-    Returns:
-        tuple: (phi_1, phi_2) in degrees as numpy arrays
     """
-    # Convert position and velocity to arrays
-    x, y, z = df["x"].values, df["y"].values, df["z"].values
-    vx, vy, vz = df["vx"].values, df["vy"].values, df["vz"].values
+    orbital_poles = get_orbital_poles(df)
+    pole_vec = np.mean(orbital_poles, axis=1)
+    pole_vec /= np.linalg.norm(pole_vec)  # normalize to unit vector
 
-    # Compute angular momentum vector L = r × v (cross product)
-    Lx = y * vz - z * vy
-    Ly = z * vx - x * vz
-    Lz = x * vy - y * vx
+    # x direction: vector from origin to progenitor (ref point in position space)
+    x_vec = np.array(ref_point_vec[:3])
+    x_vec /= np.linalg.norm(x_vec)
 
-    # Normalize the mean angular momentum vector
-    L_vec = np.array([Lx.mean(), Ly.mean(), Lz.mean()])
-    L_vec /= np.linalg.norm(L_vec)
+    # z direction: use the orbital pole
+    z_vec = pole_vec
 
-    # Convert mean angular momentum to SkyCoord in Galactocentric frame
-    """
-    pole = SkyCoord(
-        x=L_vec[0] * u.kpc,
-        y=L_vec[1] * u.kpc,
-        z=L_vec[2] * u.kpc,
-        representation_type="cartesian",
-        frame=Galactocentric(),
-    ).transform_to(ICRS())
-    """
-    pole = SkyCoord(l=0.0 * u.deg, b=90.0 * u.deg, frame="galactic")
-    pole = pole.transform_to(ICRS())
+    # y direction: complete right-handed system
+    y_vec = np.cross(z_vec, x_vec)
+    y_vec /= np.linalg.norm(y_vec)
 
-    # Set reference point for the progenitor
-    ref_x, ref_y, ref_z = ref_point_vec
-    ref = SkyCoord(
-        x=ref_x * u.kpc,
-        y=ref_y * u.kpc,
-        z=ref_z * u.kpc,
-        representation_type="cartesian",
-        frame=Galactocentric(),
-    ).transform_to(ICRS())
+    # Recompute x_vec to be orthogonal to z and y
+    x_vec = np.cross(y_vec, z_vec)
+    x_vec /= np.linalg.norm(x_vec)
 
-    # Define the great circle frame using the calculated pole and reference RA
-    stream_frame = GreatCircleICRSFrame.from_pole_ra0(pole, ref.ra)
+    xnew = coord.representation.CartesianRepresentation(*(x_vec * u.kpc))
+    znew = coord.representation.CartesianRepresentation(*(z_vec * u.kpc))
 
-    # Transform the coordinates into the stream-aligned frame
-    coords = SkyCoord(
-        x=x * u.kpc,
-        y=y * u.kpc,
-        z=z * u.kpc,
-        representation_type="cartesian",
-        frame=Galactocentric(),
-    ).transform_to(stream_frame)
+    frame = gc.GreatCircleICRSFrame.from_xyz(xnew=xnew, znew=znew)
 
-    # Convert phi1 and phi2 to degrees, and wrap phi1 to [-180, 180)
-    phi1_zero_to_360 = coords.phi1.deg + 180.0
-
-    phi1 = np.where(
-        phi1_zero_to_360 > 180.0, phi1_zero_to_360 - 360.0, phi1_zero_to_360
+    # Positions (in kpc)
+    positions = coord.representation.CartesianRepresentation(
+        df["x"].values * u.kpc, df["y"].values * u.kpc, df["z"].values * u.kpc
     )
-    phi2 = coords.phi2.deg
 
-    return phi1, phi2
+    # Velocities (in km/s)
+    velocities = coord.representation.CartesianDifferential(
+        df["vx"].values * u.km / u.s,
+        df["vy"].values * u.km / u.s,
+        df["vz"].values * u.km / u.s,
+    )
+
+    # Combine position and velocity
+    positions_with_velocities = positions.with_differentials(velocities)
+
+    # Construct SkyCoord from this
+    skycoord = coord.SkyCoord(positions_with_velocities)
+    coord_new = skycoord.transform_to(frame)
+
+    mu_phi1 = coord_new.pm_phi1_cosphi2 / np.cos(coord_new.phi2)
+    mu_phi1 = mu_phi1.to(u.mas / u.yr).value
+    mu_phi2 = coord_new.pm_phi2.to(u.mas / u.yr).value
+
+    phi_info_dict = {
+        "phi1": coord_new.phi1.to(u.deg).value,
+        "phi2": coord_new.phi2.to(u.deg).value,
+        "mu_phi1": mu_phi1,
+        "mu_phi2": mu_phi2,
+    }
+
+    return phi_info_dict
 
 
 def plot_phi1_phi2_kde_panels(stream_info_dict):
@@ -256,66 +283,82 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
     """
     fig, axs = plt.subplots(3, 1, figsize=(8, 14), sharex=True, sharey=True)
 
-    labels_ordered = [
+    codenames_ordered = [
         "CHC",
-        "Particle Spray (Chen et al. (2024))",
-        r"Direct $N$-body",
+        "Chen",
+        "N-body",
     ]
 
-    colors = {
-        "CHC": "C0",
-        "Particle Spray (Chen et al. (2024))": "C1",
-        r"Direct $N$-body": "C2",
+    for codename in codenames_ordered:
+        print(stream_info_dict[codename].keys())
+
+    label_dict = {
+        "CHC": "CHC",
+        "Chen": "Particle Spray (Chen et al. (2024))",
+        "N-body": r"Direct $N$-body",
     }
 
     # Global bounds for consistency across panels
     all_phi1 = np.concatenate(
-        [stream_info_dict[label]["phi_one"] for label in labels_ordered]
+        [
+            stream_info_dict[codename]["phi_info"]["phi1"]
+            for codename in codenames_ordered
+        ]
     )
     all_phi2 = np.concatenate(
-        [stream_info_dict[label]["phi_two"] for label in labels_ordered]
+        [
+            stream_info_dict[codename]["phi_info"]["phi2"]
+            for codename in codenames_ordered
+        ]
     )
 
     min_phi1, max_phi1 = np.percentile(all_phi1, [1, 99])
-    min_phi2, max_phi2 = np.percentile(all_phi2, [1, 99])
+    phi1_bins = np.linspace(min_phi1, max_phi1, 100)
 
-    xi, yi = np.meshgrid(
-        np.linspace(min_phi1, max_phi1, 200),
-        np.linspace(min_phi2, max_phi2, 200),
-    )
+    min_phi2, max_phi2 = np.percentile(all_phi2, [1, 99])
+    phi2_bins = np.linspace(min_phi2, max_phi2, 100)
 
     zi_dict = {}
-    for ax, label in zip(axs, labels_ordered):
-        data = stream_info_dict[label]
-        phi1, phi2 = data["phi_one"], data["phi_two"]
+    for ax, codename in zip(axs, codenames_ordered):
+        data = stream_info_dict[codename]
+        phi1, phi2 = data["phi_info"]["phi1"], data["phi_info"]["phi2"]
 
         kde = gaussian_kde(np.vstack([phi1, phi2]))
+        xi, yi = np.meshgrid(phi1_bins, phi2_bins)
         zi = kde(np.vstack([xi.ravel(), yi.ravel()])).reshape(xi.shape)
         zi /= np.sum(zi)
+        
+        """
+        # Compute 2D histogram
+        hist, _, _= np.histogram2d(
+            phi1,
+            phi2,
+            bins=[phi1_bins, phi2_bins],
+            range=[[min_phi1, max_phi1], [min_phi2, max_phi2]],
+            density=True,  # Normalize the histogram
+        )
 
-        zi_dict[label] = zi
+        # hist is indexed as [x, y] but imshow expects [y, x], so transpose
+        zi = hist.T
+        """
+
+        zi_dict[codename] = zi
 
         im = ax.imshow(
             zi,
             extent=(min_phi1, max_phi1, min_phi2, max_phi2),
             origin="lower",
             aspect="auto",
-            cmap="jet",  # You can change to 'plasma', 'inferno', etc.
+            cmap="viridis",  # You can change to 'plasma', 'inferno', etc.
             alpha=0.9,
-            vmin=1e-6,
-            vmax=7e-5,
         )
 
-        ax.set_title(label, fontsize=14)
+        ax.set_title(label_dict[codename], fontsize=14)
         ax.grid(linewidth=0.5, linestyle="--", alpha=0.5)
 
-    import pdb
-
-    pdb.set_trace()
-
     zi_chc = zi_dict["CHC"]
-    zi_chen = zi_dict["Particle Spray (Chen et al. (2024))"]
-    zi_n_body = zi_dict[r"Direct $N$-body"]
+    zi_chen = zi_dict["Chen"]
+    zi_n_body = zi_dict[r"N-body"]
 
     print(f"KLD for CHC: {np.sum(zi_chc * np.log(zi_chc/zi_n_body))}")
     print(f"KLD for particle spray: {np.sum(zi_chen * np.log(zi_chen/zi_n_body))}")
@@ -339,9 +382,16 @@ def main():
         chc_info_dict["df_unbound"],
     )
     ref_point_vec_chc = np.array(
-        [df_chc_bound["x"].mean(), df_chc_bound["y"].mean(), df_chc_bound["z"].mean()]
+        [
+            df_chc_bound["x"].mean(),
+            df_chc_bound["y"].mean(),
+            df_chc_bound["z"].mean(),
+            df_chc_bound["vx"].mean(),
+            df_chc_bound["vy"].mean(),
+            df_chc_bound["vz"].mean(),
+        ]
     )
-    chc_info_dict["phi"] = get_phi_one_two(df_chc_unbound, ref_point_vec_chc)
+    chc_info_dict["phi_info"] = get_phi_info(df_chc_unbound, ref_point_vec_chc)
 
     df_chen = pd.read_csv(DATA_DIR + "chen_streams/chen_circular_orbit_stream.csv")
     df_chen_bound, df_chen_unbound = (
@@ -353,9 +403,12 @@ def main():
             df_chen_bound["x"].mean(),
             df_chen_bound["y"].mean(),
             df_chen_bound["z"].mean(),
+            df_chen_bound["vx"].mean(),
+            df_chen_bound["vy"].mean(),
+            df_chen_bound["vz"].mean(),
         ]
     )
-    chen_phi_info = get_phi_one_two(df_chen, ref_point_vec_chen)
+    chen_phi_info = {"phi_info": get_phi_info(df_chen, ref_point_vec_chen)}
 
     n_body_info_dict = load_data_n_body()
     df_n_body_bound, df_n_body_unbound = (
@@ -367,21 +420,18 @@ def main():
             df_n_body_bound["x"].mean(),
             df_n_body_bound["y"].mean(),
             df_n_body_bound["z"].mean(),
+            df_n_body_bound["vx"].mean(),
+            df_n_body_bound["vy"].mean(),
+            df_n_body_bound["vz"].mean(),
         ]
     )
-    n_body_info_dict["phi"] = get_phi_one_two(df_n_body_unbound, ref_point_vec_n_body)
+    n_body_info_dict["phi_info"] = get_phi_info(df_n_body_unbound, ref_point_vec_n_body)
 
     # CHC IOMs have to be convert to specific IOMs
     stream_info_dict = {
-        "CHC": {"phi_one": chc_info_dict["phi"][0], "phi_two": chc_info_dict["phi"][1]},
-        "Particle Spray (Chen et al. (2024))": {
-            "phi_one": chen_phi_info[0],
-            "phi_two": chen_phi_info[1],
-        },
-        r"Direct $N$-body": {
-            "phi_one": n_body_info_dict["phi"][0],
-            "phi_two": n_body_info_dict["phi"][1],
-        },
+        "CHC": chc_info_dict,
+        "Chen": chen_phi_info,
+        "N-body": n_body_info_dict,
     }
 
     plot_phi1_phi2_kde_panels(stream_info_dict)
