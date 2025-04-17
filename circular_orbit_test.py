@@ -22,6 +22,9 @@ import h5py
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["mathtext.fontset"] = "dejavuserif"
 
+plt.rcParams["font.family"] = "serif"
+plt.rcParams["mathtext.fontset"] = "dejavuserif"
+
 DATA_DIR = "/home/btcook/Desktop/chc_ii_paper/circular_orbit_subdir/"
 KPC_TO_PC = 1000.0
 KMS_TO_KPC_PER_MYR = 1 / 978.5
@@ -84,7 +87,7 @@ def load_data_n_body():
         index_col=False,
     )
 
-    # get unit conversion info
+    # get unit conversion info, TODO: fix
     n_body_h5_filename = DATA_DIR + "stream_frog/iom_cluster_63879115934970.hf5"
     with h5py.File(n_body_h5_filename, "r") as f:
         # print(f.keys())
@@ -278,107 +281,144 @@ def get_phi_info(df, ref_point_vec):
     return phi_info_dict
 
 
-def plot_phi1_phi2_kde_panels(stream_info_dict):
+def plot_streams(stream_info_dict):
     """
-    Create a 3-row, 1-column plot:
-    - Row 1: KDE for CHC (phi1 vs phi2)
-    - Row 2: KDE for Particle Spray
-    - Row 3: KDE for Direct N-body
+    Create a 2-row, 2-column plot:
+    - Contour plot for (Lz, Etot)
+    - Contour plot for (vz, z)
+    - Histogram for phi_1
+    - Mass-loss rate for CHC, N-body
     """
-    fig, axs = plt.subplots(3, 1, figsize=(8, 14), sharex=True, sharey=True)
-
-    codenames_ordered = [
-        "CHC",
-        "Chen",
-        "N-body",
-    ]
-
-    label_dict = {
-        "CHC": "CHC",
-        "Chen": "Particle Spray (Chen et al. (2024))",
-        "N-body": r"Direct $N$-body",
+    fig, axs = plt.subplots(2, 2, figsize=(12, 12))
+    colors = {
+        "CHC": "C0",
+        "Particle Spray (Chen et al. (2024))": "C1",
+        r"Direct $N$-body": "C2",
     }
 
+    # --- Panel 1: Scatter Plot (Lz vs. Etot) ---
+    ax1 = axs[0, 0]
+
+    for label, data in stream_info_dict.items():
+        Lz, Etot = data["L_z"], data["E_total"]
+        ax1.scatter(Lz, Etot, c=colors[label], s=1, alpha=0.5, label=label)
+
+    ax1.set_xlabel(r"$L_z \, [10^{3} \, {\rm kpc} \,  {\rm km/s}]$", fontsize=18)
+    ax1.set_ylabel(r"$E_{\mathrm{tot}} [10^{5} \, ({\rm km/s})^{2}]$", fontsize=18)
+    ax1.grid(linewidth=0.5, linestyle="--", c="k", alpha=0.5)
+
+    # --- Panel 2: Contour Plot (vz vs. z) ---
+    ax2 = axs[0, 1]
+    legend_patches = []
+    for label, data in stream_info_dict.items():
+        vz, z = data["vz"], data["z"]
+
+        set_trace()
+
+        min_vz, max_vz = np.percentile(vz, 1.0), np.percentile(vz, 99.0)
+        min_z, max_z = np.percentile(z, 1.0), np.percentile(z, 99.0)
+
+        xi, yi = np.meshgrid(
+            np.linspace(min_vz, max_vz, 100),
+            np.linspace(min_z, max_z, 100),
+        )
+
+        kde = gaussian_kde(np.vstack([vz, z]))
+        zi = kde(np.vstack([xi.ravel(), yi.ravel()])).reshape(xi.shape)
+
+        contour = ax2.contour(
+            xi,
+            yi,
+            zi,
+            colors=colors[label],
+            levels=5,
+            linewidths=0.6,
+            alpha=0.6,
+        )
+
+        # Create a proxy artist (colored patch) for the legend
+        legend_patches.append(mpatches.Patch(color=colors[label], label=label))
+
+    ax2.set_xlabel(r"$v_z$ [km/s]", fontsize=18)
+    ax2.set_ylabel(r"$z$ [kpc]", fontsize=18)
+    ax2.grid(linewidth=0.5, linestyle="--", c="k", alpha=0.5)
+    ax2.legend(handles=legend_patches, loc="best", fontsize=8)
+
+    # --- Panel 3: f(phi_1) = \int d \phi_2 rho(\phi_1, \phi_2) ---
     # Global bounds for consistency across panels
     all_phi1 = np.concatenate(
         [
-            stream_info_dict[codename]["phi_info"]["phi1"]
-            for codename in codenames_ordered
+            stream_info_dict[label]["phi_info"]["phi1"]
+            for label in stream_info_dict.keys()
         ]
     )
     all_phi2 = np.concatenate(
         [
-            stream_info_dict[codename]["phi_info"]["phi2"]
-            for codename in codenames_ordered
+            stream_info_dict[label]["phi_info"]["phi2"]
+            for label in stream_info_dict.keys()
         ]
     )
 
-    n_phi1 = 100
-    min_phi1, max_phi1 = np.percentile(all_phi1, [1.0, 99.0])
-    phi1_bins = np.linspace(min_phi1, max_phi1, n_phi1)
+    min_phi1, max_phi1 = np.percentile(all_phi1, [1, 99])
+    min_phi2, max_phi2 = np.percentile(all_phi2, [1, 99])
 
-    n_phi2 = 100
-    min_phi2, max_phi2 = np.percentile(all_phi2, [1.0, 99.0])
-    phi2_bins = np.linspace(min_phi2, max_phi2, n_phi2)
+    n_third_panel_gridpoints = 200
+    phi1_values = np.linspace(min_phi1, max_phi1, n_third_panel_gridpoints)
+    phi2_values = np.linspace(min_phi2, max_phi2, n_third_panel_gridpoints)
 
-    n_bins = n_phi1 * n_phi2
+    xi, yi = np.meshgrid(phi1_values, phi2_values)
 
-    zi_dict = {}
-    for ax, codename in zip(axs, codenames_ordered):
-        data = stream_info_dict[codename]
+    label_phi_dict = {}
+
+    ax3 = axs[1, 0]
+    for label, data in stream_info_dict.items():
+        data = stream_info_dict[label]
         phi1, phi2 = data["phi_info"]["phi1"], data["phi_info"]["phi2"]
 
         kde = gaussian_kde(np.vstack([phi1, phi2]))
-        xi, yi = np.meshgrid(phi1_bins, phi2_bins)
         zi = kde(np.vstack([xi.ravel(), yi.ravel()])).reshape(xi.shape)
         zi /= np.sum(zi)
-        
-        """
-        # Compute 2D histogram
-        hist, _, _= np.histogram2d(
-            phi1,
-            phi2,
-            bins=[phi1_bins, phi2_bins],
-            range=[[min_phi1, max_phi1], [min_phi2, max_phi2]],
-            density=True,  # Normalize the histogram
-        )
 
-        # hist is indexed as [x, y] but imshow expects [y, x], so transpose
-        zi = hist.T
-        """
+        label_phi_dict[label] = data["phi_info"]["phi1"]
+        ax3.plot(phi1_values, np.sum(zi, axis=1), label=label)
 
-        zi_dict[codename] = zi
+    """
+    # Compute KS test for each pair of phi1 distributions
+    labels = list(label_phi_dict.keys())
+    for i in range(len(labels)):
+        for j in range(i + 1, len(labels)):
+            label1, label2 = labels[i], labels[j]
+            data1, data2 = label_phi_dict[label1], label_phi_dict[label2]
 
-        im = ax.imshow(
-            zi,
-            extent=(min_phi1, max_phi1, min_phi2, max_phi2),
-            origin="lower",
-            aspect="auto",
-            cmap="jet",  # You can change to 'plasma', 'inferno', etc.
-            #norm=LogNorm(vmin=0.01 / n_bins, vmax=10.0 / n_bins),
-            alpha=0.9,
-        )
+            ks_stat, p_value = ks_2samp(data1, data2)
 
-        ax.set_title(label_dict[codename], fontsize=14)
-        ax.grid(linewidth=0.5, linestyle="--", alpha=0.5)
+            print(f"KS test between {label1} and {label2}:")
+            print(f"  KS statistic = {ks_stat:.4f}, p-value = {p_value:.4e}")
+    """
+    
+    ax3.set_xlabel(r"$\phi_1$ [deg]", fontsize=18)
+    ax3.set_ylabel(r"$f(\phi_{1}) = \int {\rm d}\phi_{2} \, \rho_{\rm norm}(\phi_{1},\phi_{2})$", fontsize=18)
+    ax3.grid(linewidth=0.5, linestyle="--", c="k", alpha=0.5)
 
-    zi_chc = zi_dict["CHC"]
-    zi_chen = zi_dict["Chen"]
-    zi_n_body = zi_dict[r"N-body"]
+    ax4 = axs[1, 1]
+    for label, data in stream_info_dict.items():
+        if label != "Particle Spray (Chen et al. (2024))":
+            ax4.plot(
+                data["info_dict"]["times"],
+                data["info_dict"]["unbound_frac"],
+                label=label,
+                linewidth=1,
+                color=colors[label],
+            )
 
-    print(f"KLD for CHC: {np.sum(zi_chc * np.log(zi_chc/zi_n_body))}")
-    print(f"KLD for particle spray: {np.sum(zi_chen * np.log(zi_chen/zi_n_body))}")
-
-    axs[-1].set_xlabel(r"$\phi_1$ [deg]", fontsize=16)
-    for ax in axs:
-        ax.set_ylabel(r"$\phi_2$ [deg]", fontsize=16)
-
-    fig.subplots_adjust(right=0.85)
-    cbar_ax = fig.add_axes([1.03, 0.05, 0.05, 0.9])  # adjust position as needed
-    fig.colorbar(im, cax=cbar_ax).set_label("PDF", fontsize=12)
+    ax4.set_xlabel(r"Time [Myr]", fontsize=18)
+    ax4.set_ylabel(r"$M_{\rm unbound}/M_{\rm total}$", fontsize=18)
+    ax4.set_aspect("auto")
+    ax4.set_xlim(0.0, 3000.0)
+    ax4.grid(linewidth=0.5, linestyle="--", alpha=0.5)
 
     plt.tight_layout()
-    plt.savefig("phi1_phi2_kde_panels.png", bbox_inches="tight", dpi=400)
+    plt.savefig("circular_orbit_comps.png", bbox_inches="tight", dpi=400)
 
 
 def main():
@@ -388,33 +428,11 @@ def main():
         chc_info_dict["df_unbound"],
     )
     ref_point_vec_chc = np.array(
-        [
-            df_chc_bound["x"].mean(),
-            df_chc_bound["y"].mean(),
-            df_chc_bound["z"].mean(),
-            df_chc_bound["vx"].mean(),
-            df_chc_bound["vy"].mean(),
-            df_chc_bound["vz"].mean(),
-        ]
+        [df_chc_bound["x"].mean(), df_chc_bound["y"].mean(), df_chc_bound["z"].mean()]
     )
-    chc_info_dict["phi_info"] = get_phi_info(df_chc_unbound, ref_point_vec_chc)
 
     df_chen = pd.read_csv(DATA_DIR + "chen_streams/chen_circular_orbit_stream.csv")
-    df_chen_bound, df_chen_unbound = (
-        df_chen[df_chen["source"] == "prog"],
-        df_chen[df_chen["source"] == "stream"],
-    )
-    ref_point_vec_chen = np.array(
-        [
-            df_chen_bound["x"].mean(),
-            df_chen_bound["y"].mean(),
-            df_chen_bound["z"].mean(),
-            df_chen_bound["vx"].mean(),
-            df_chen_bound["vy"].mean(),
-            df_chen_bound["vz"].mean(),
-        ]
-    )
-    chen_phi_info = {"phi_info": get_phi_info(df_chen, ref_point_vec_chen)}
+    ref_point_vec_chen = np.array([10.0, 0.0, 0.0])
 
     n_body_info_dict = load_data_n_body()
     df_n_body_bound, df_n_body_unbound = (
@@ -426,21 +444,45 @@ def main():
             df_n_body_bound["x"].mean(),
             df_n_body_bound["y"].mean(),
             df_n_body_bound["z"].mean(),
-            df_n_body_bound["vx"].mean(),
-            df_n_body_bound["vy"].mean(),
-            df_n_body_bound["vz"].mean(),
         ]
     )
-    n_body_info_dict["phi_info"] = get_phi_info(df_n_body_unbound, ref_point_vec_n_body)
+
+    plt.figure()
+    plt.scatter(df_chc_unbound["x"], df_chc_unbound["y"])
+    plt.scatter(df_chen["x"], df_chen["y"])
+    plt.scatter(df_n_body_unbound["x"], df_n_body_unbound["y"])
+    plt.show()
+
+    m_star = 10.0  # MSun
 
     # CHC IOMs have to be convert to specific IOMs
     stream_info_dict = {
-        "CHC": chc_info_dict,
-        "Chen": chen_phi_info,
-        "N-body": n_body_info_dict,
+        "CHC": {
+            "L_z": df_chc_unbound["L_z"] / (1e3 * m_star),
+            "E_total": df_chc_unbound["E_total"] / (1e5 * m_star),
+            "phi_info": get_phi_info(df_chc_unbound, ref_point_vec_chc),
+            "z": df_chc_unbound["z"],
+            "vz": df_chc_unbound["vz"],
+            "info_dict": chc_info_dict,
+        },
+        "Particle Spray (Chen et al. (2024))": {
+            "L_z": df_chen["L_z"] / 1e3,
+            "E_total": df_chen["E_wrt_host"] / 1e5,
+            "phi_info": get_phi_info(df_chen, ref_point_vec_chen),
+            "z": df_chen["z"],
+            "vz": df_chen["vz"],
+        },
+        r"Direct $N$-body": {
+            "L_z": df_n_body_unbound["L_z"] / 1e3,
+            "E_total": df_n_body_unbound["E_total"] / 1e5,
+            "phi_info": get_phi_info(df_n_body_unbound, ref_point_vec_n_body),
+            "z": df_n_body_unbound["z"],
+            "vz": df_n_body_unbound["vz"],
+            "info_dict": n_body_info_dict,
+        },
     }
 
-    plot_phi1_phi2_kde_panels(stream_info_dict)
+    plot_streams(stream_info_dict)
 
 
 if __name__ == "__main__":
