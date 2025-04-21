@@ -295,7 +295,7 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
 
     label_dict = {
         "CHC": "CHC",
-        "Chen": "Particle Spray (Chen et al. (2024))",
+        "Chen": "Particle Spray (Chen et al. (2025))",
         "N-body": r"Direct $N$-body",
     }
 
@@ -313,12 +313,12 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
         ]
     )
 
-    n_phi1 = 100
-    min_phi1, max_phi1 = np.percentile(all_phi1, [1.0, 99.0])
+    n_phi1 = 200
+    min_phi1, max_phi1 = np.percentile(all_phi1, [0.5, 99.5])
     phi1_bins = np.linspace(min_phi1, max_phi1, n_phi1)
 
-    n_phi2 = 100
-    min_phi2, max_phi2 = np.percentile(all_phi2, [1.0, 99.0])
+    n_phi2 = 200
+    min_phi2, max_phi2 = np.percentile(all_phi2, [0.5, 99.5])
     phi2_bins = np.linspace(min_phi2, max_phi2, n_phi2)
 
     n_bins = n_phi1 * n_phi2
@@ -356,7 +356,7 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
             aspect="auto",
             cmap="jet",  # You can change to 'plasma', 'inferno', etc.
             #norm=LogNorm(vmin=0.01 / n_bins, vmax=10.0 / n_bins),
-            alpha=0.9,
+            alpha=0.8,
         )
 
         ax.set_title(label_dict[codename], fontsize=14)

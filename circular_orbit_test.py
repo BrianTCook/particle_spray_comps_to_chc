@@ -70,16 +70,20 @@ def load_data_chc():
 def load_data_n_body():
     """
     Loads the N-body simulation data, converts units based on length_unit and mass_unit,
-    and computes additional quantities.
-    all of the columns are in HU:
-    cols: x, y, z, vx, vy, vz, U_int, U_c
-    U_int is the N-body interaction energy of a star with all other N-1 stars
-    U_c is the host potential energy
-    E_tot = sum_i K_i + 0.5*sum_i U_{int,i} + sum_i U_{c,i} (edite
+    and computes energies relative to both the host and the cluster.
+
+    All columns in the input file are in N-body (HU) units:
+        x, y, z, vx, vy, vz, m, U_int, U_c
 
     Returns:
-        pd.DataFrame: Dataframe with converted physical units and computed values.
+        dict: {
+            "df_bound": bound particles (within tidal radius),
+            "df_unbound": unbound particles (outside tidal radius),
+            "times": snapshot times from HDF5 file,
+            "unbound_frac": unbound fraction from HDF5 file,
+        }
     """
+    # Load simulation snapshot
     df = pd.read_csv(
         DATA_DIR + "stream_frog/time_567.0.txt",
         sep="\t",
@@ -87,35 +91,27 @@ def load_data_n_body():
         index_col=False,
     )
 
-    # get unit conversion info, TODO: fix
+    # Load unit conversions and extra metadata
     n_body_h5_filename = DATA_DIR + "stream_frog/iom_cluster_63879115934970.hf5"
     with h5py.File(n_body_h5_filename, "r") as f:
-        # print(f.keys())
         mass_unit = f["Msun_per_HU"][()]
         length_unit = f["kpc_per_HU"][()]
         time_unit = f["Myr_per_HU"][()]
-
         data_time = f["data_time_Myr"][:]
         data_unbound_frac = f["data_unbound_frac"][:]
 
-    # length unit: kpc, time_unit: Myr, need to convert velocity_unit to km/s
+    # Derived units
     velocity_unit = (length_unit / time_unit) / KMS_TO_KPC_PER_MYR
-    energy_unit = mass_unit * velocity_unit**2  # Conversion factor for potential energy
+    energy_unit = mass_unit * velocity_unit**2  # for U_int and U_c
 
-    # Msun
+    # Convert units
     df["m"] *= mass_unit
-
-    # kpc
     df["x"] *= length_unit
     df["y"] *= length_unit
     df["z"] *= length_unit
-
-    # km/s
     df["vx"] *= velocity_unit
     df["vy"] *= velocity_unit
     df["vz"] *= velocity_unit
-
-    # MSun * (km/s)^2
     df["U_int"] *= energy_unit
     df["U_c"] *= energy_unit
 
@@ -125,34 +121,38 @@ def load_data_n_body():
     # kinetic energy
     df["K"] = 0.5 * df["m"] * (df["vx"] ** 2 + df["vy"] ** 2 + df["vz"] ** 2)
 
-    # specific total energy
-    df["E_total"] = (df["K"] + df["U_int"] + df["U_c"]) / df["m"]
+    # kinetic energy + host potential energy
+    df["E_wrt_host"] = df["K"] + df["U_c"]
+
+    # total energy
+    df["E_total"] = df["E_wrt_host"] + 0.5 * df["U_int"]
 
     """
-    # Coordinates of the cluster via the most bound particles
+    # Identify cluster's core velocity using most bound particles (10% lowest U_int)
     cluster_particles = df[df["U_int"] < np.percentile(df["U_int"], 10.0)]
-    vx_cluster, vy_cluster, vz_cluster = (
-        cluster_particles["vx"].mean(),
-        cluster_particles["vy"].mean(),
-        cluster_particles["vz"].mean(),
+    vx_cluster = cluster_particles["vx"].mean()
+    vy_cluster = cluster_particles["vy"].mean()
+    vz_cluster = cluster_particles["vz"].mean()
+
+    # Optional: compute E_wrt_cluster using cluster's rest frame
+    # This is similar to above but subtracts cluster's bulk motion
+    df["E_wrt_cluster_restframe"] = (
+        df["U_int"]
+        + 0.5
+        * (
+            (df["vx"] - vx_cluster) ** 2
+            + (df["vy"] - vy_cluster) ** 2
+            + (df["vz"] - vz_cluster) ** 2
+        )
+        * df["m"]
     )
 
-    # remove bound particles
-    df["E_wrt_cluster"] = df["U_int"] + 0.5 * (
-        (df["vx"] - vx_cluster) ** 2.0
-        + (df["vy"] - vy_cluster) ** 2.0
-        + (df["vz"] - vz_cluster) ** 2.0
-    )
-
-    set_trace()
-
-    plt.hist(df["E_wrt_cluster"])
-    plt.show()
-
-    df = df[df["E_wrt_cluster"] > 0.0]
+    # Filter out unbound (positive energy) particles
+    df_bound = df[df["E_wrt_cluster"] < 0.0]
+    df_unbound = df[df["E_wrt_cluster"] >= 0.0]
     """
 
-    # Coordinates of the well particle
+    # Identify cluster center from most bound particle
     well_particle = df[df["U_int"] == df["U_int"].min()]
     x_well, y_well, z_well = (
         well_particle["x"].values[0],
@@ -160,15 +160,15 @@ def load_data_n_body():
         well_particle["z"].values[0],
     )
 
-    # Compute squared distances for efficiency
+    # Compute squared distances
     dist_sq = (
         (df["x"] - x_well) ** 2 + (df["y"] - y_well) ** 2 + (df["z"] - z_well) ** 2
     )
 
     # Filter out particles within r_t
-    r_t = 0.08781883404823516  # tidal radius, kpc
-    df_bound = df[dist_sq <= r_t**2.0]
-    df_unbound = df[dist_sq > r_t**2.0]
+    r_t = 0.08781883404823516
+    df_bound = df[dist_sq <= r_t**2]
+    df_unbound = df[dist_sq > r_t**2]
 
     info_dict = {
         "df_bound": df_bound,
@@ -284,7 +284,7 @@ def get_phi_info(df, ref_point_vec):
 def plot_streams(stream_info_dict):
     """
     Create a 2-row, 2-column plot:
-    - Contour plot for (Lz, Etot)
+    - Scatter plot for (Lz, Etot)
     - Contour plot for (vz, z)
     - Histogram for phi_1
     - Mass-loss rate for CHC, N-body
@@ -292,7 +292,7 @@ def plot_streams(stream_info_dict):
     fig, axs = plt.subplots(2, 2, figsize=(12, 12))
     colors = {
         "CHC": "C0",
-        "Particle Spray (Chen et al. (2024))": "C1",
+        "Particle Spray (Chen et al. (2025))": "C1",
         r"Direct $N$-body": "C2",
     }
 
@@ -301,37 +301,57 @@ def plot_streams(stream_info_dict):
 
     for label, data in stream_info_dict.items():
         Lz, Etot = data["L_z"], data["E_total"]
+        print(label, Etot.min(), Etot.max())
         ax1.scatter(Lz, Etot, c=colors[label], s=1, alpha=0.5, label=label)
 
     ax1.set_xlabel(r"$L_z \, [10^{3} \, {\rm kpc} \,  {\rm km/s}]$", fontsize=18)
-    ax1.set_ylabel(r"$E_{\mathrm{tot}} [10^{5} \, ({\rm km/s})^{2}]$", fontsize=18)
+    ax1.set_ylabel(
+        r"$E_{\mathrm{wrt \, host}} [10^{5} \, ({\rm km/s})^{2}]$", fontsize=18
+    )
     ax1.grid(linewidth=0.5, linestyle="--", c="k", alpha=0.5)
 
     # --- Panel 2: Contour Plot (vz vs. z) ---
     ax2 = axs[0, 1]
     legend_patches = []
     for label, data in stream_info_dict.items():
-        vz, z = data["vz"], data["z"]
+        vz, z = data["vz"], data["z"] * 1000.0
 
-        set_trace()
+        # Build KDE and evaluate it at each data point
+        kde = gaussian_kde(np.vstack([vz, z]))
+        kde_vals_at_data = kde(np.vstack([vz, z]))
 
+        # Sort KDE values at sample points, descending
+        sorted_kde_vals = np.sort(kde_vals_at_data)[::-1]
+
+        # Compute cumulative fraction of samples
+        cum_frac = np.cumsum(sorted_kde_vals)
+        cum_frac /= cum_frac[-1]  # normalize to 1
+
+        # Map desired data fractions to KDE thresholds
+        probs = [0.1, 0.5, 0.9]
+        levels = []
+        for p in probs:
+            idx = np.searchsorted(cum_frac, p)
+            levels.append(sorted_kde_vals[idx])
+
+        levels = sorted(levels)  # for contour plotting
+
+        # Plot KDE on grid
         min_vz, max_vz = np.percentile(vz, 1.0), np.percentile(vz, 99.0)
         min_z, max_z = np.percentile(z, 1.0), np.percentile(z, 99.0)
 
         xi, yi = np.meshgrid(
-            np.linspace(min_vz, max_vz, 100),
-            np.linspace(min_z, max_z, 100),
+            np.linspace(min_vz, max_vz, 200),
+            np.linspace(min_z, max_z, 200),
         )
-
-        kde = gaussian_kde(np.vstack([vz, z]))
         zi = kde(np.vstack([xi.ravel(), yi.ravel()])).reshape(xi.shape)
 
         contour = ax2.contour(
             xi,
             yi,
             zi,
+            levels=levels,
             colors=colors[label],
-            levels=5,
             linewidths=0.6,
             alpha=0.6,
         )
@@ -340,7 +360,7 @@ def plot_streams(stream_info_dict):
         legend_patches.append(mpatches.Patch(color=colors[label], label=label))
 
     ax2.set_xlabel(r"$v_z$ [km/s]", fontsize=18)
-    ax2.set_ylabel(r"$z$ [kpc]", fontsize=18)
+    ax2.set_ylabel(r"$z$ [pc]", fontsize=18)
     ax2.grid(linewidth=0.5, linestyle="--", c="k", alpha=0.5)
     ax2.legend(handles=legend_patches, loc="best", fontsize=8)
 
@@ -359,8 +379,8 @@ def plot_streams(stream_info_dict):
         ]
     )
 
-    min_phi1, max_phi1 = np.percentile(all_phi1, [1, 99])
-    min_phi2, max_phi2 = np.percentile(all_phi2, [1, 99])
+    min_phi1, max_phi1 = np.percentile(all_phi1, [0.5, 99.5])
+    min_phi2, max_phi2 = np.percentile(all_phi2, [0.5, 99.5])
 
     n_third_panel_gridpoints = 200
     phi1_values = np.linspace(min_phi1, max_phi1, n_third_panel_gridpoints)
@@ -379,10 +399,10 @@ def plot_streams(stream_info_dict):
         zi = kde(np.vstack([xi.ravel(), yi.ravel()])).reshape(xi.shape)
         zi /= np.sum(zi)
 
-        label_phi_dict[label] = data["phi_info"]["phi1"]
-        ax3.plot(phi1_values, np.sum(zi, axis=1), label=label)
+        phi1_condensed = np.sum(zi, axis=0)
+        label_phi_dict[label] = phi1_condensed
+        ax3.plot(phi1_values, phi1_condensed, label=label)
 
-    """
     # Compute KS test for each pair of phi1 distributions
     labels = list(label_phi_dict.keys())
     for i in range(len(labels)):
@@ -393,16 +413,18 @@ def plot_streams(stream_info_dict):
             ks_stat, p_value = ks_2samp(data1, data2)
 
             print(f"KS test between {label1} and {label2}:")
-            print(f"  KS statistic = {ks_stat:.4f}, p-value = {p_value:.4e}")
-    """
-    
+            print(f"    KS statistic = {ks_stat:.4f}, p-value = {p_value:.4e}")
+
     ax3.set_xlabel(r"$\phi_1$ [deg]", fontsize=18)
-    ax3.set_ylabel(r"$f(\phi_{1}) = \int {\rm d}\phi_{2} \, \rho_{\rm norm}(\phi_{1},\phi_{2})$", fontsize=18)
+    ax3.set_ylabel(
+        r"$f(\phi_{1}) = \int {\rm d}\phi_{2} \, \rho(\phi_{1},\phi_{2})$",
+        fontsize=18,
+    )
     ax3.grid(linewidth=0.5, linestyle="--", c="k", alpha=0.5)
 
     ax4 = axs[1, 1]
     for label, data in stream_info_dict.items():
-        if label != "Particle Spray (Chen et al. (2024))":
+        if label != "Particle Spray (Chen et al. (2025))":
             ax4.plot(
                 data["info_dict"]["times"],
                 data["info_dict"]["unbound_frac"],
@@ -447,12 +469,6 @@ def main():
         ]
     )
 
-    plt.figure()
-    plt.scatter(df_chc_unbound["x"], df_chc_unbound["y"])
-    plt.scatter(df_chen["x"], df_chen["y"])
-    plt.scatter(df_n_body_unbound["x"], df_n_body_unbound["y"])
-    plt.show()
-
     m_star = 10.0  # MSun
 
     # CHC IOMs have to be convert to specific IOMs
@@ -465,16 +481,16 @@ def main():
             "vz": df_chc_unbound["vz"],
             "info_dict": chc_info_dict,
         },
-        "Particle Spray (Chen et al. (2024))": {
+        "Particle Spray (Chen et al. (2025))": {
             "L_z": df_chen["L_z"] / 1e3,
-            "E_total": df_chen["E_wrt_host"] / 1e5,
+            "E_total": df_chen["E_total"] / (1e5),
             "phi_info": get_phi_info(df_chen, ref_point_vec_chen),
             "z": df_chen["z"],
             "vz": df_chen["vz"],
         },
         r"Direct $N$-body": {
             "L_z": df_n_body_unbound["L_z"] / 1e3,
-            "E_total": df_n_body_unbound["E_total"] / 1e5,
+            "E_total": df_n_body_unbound["E_total"] / (1e5 * m_star),
             "phi_info": get_phi_info(df_n_body_unbound, ref_point_vec_n_body),
             "z": df_n_body_unbound["z"],
             "vz": df_n_body_unbound["vz"],
