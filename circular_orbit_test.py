@@ -10,6 +10,8 @@ import matplotlib.patches as mpatches
 from matplotlib.colors import LogNorm
 
 import gala.coordinates as gc
+import gala.dynamics as gd
+
 import astropy.coordinates as coord
 import astropy.units as u
 
@@ -29,6 +31,33 @@ DATA_DIR = "/home/btcook/Desktop/chc_ii_paper/circular_orbit_subdir/"
 KPC_TO_PC = 1000.0
 KMS_TO_KPC_PER_MYR = 1 / 978.5
 
+import agama  # to calculate action
+
+agama.setUnits(length=1, velocity=1, mass=1)  # working units: 1 Msun, 1 kpc, 1 km/s
+
+actFinder = agama.ActionFinder(
+    agama.Potential(
+        "/home/btcook/Desktop/github_repositories/CHC/agama/data/MWPotential2014.ini"
+    )
+)
+
+
+def get_action_diffs(df_bound, df_unbound):
+    # Assumes df_bound and df_unbound are DataFrames with columns ['x','y','z','vx','vy','vz'] in AGAMA units
+    posvel_bound = df_bound[["x", "y", "z", "vx", "vy", "vz"]].to_numpy()
+    posvel_unbound = df_unbound[["x", "y", "z", "vx", "vy", "vz"]].to_numpy()
+
+    return actFinder(posvel_unbound)
+    """
+    actions_bound = actFinder(posvel_bound)
+    actions_unbound = actFinder(posvel_unbound)
+
+    mean_bound_action = np.mean(actions_bound, axis=0)
+
+    # shape (N_unbound, 3)
+    return actions_unbound - mean_bound_action
+    """
+
 
 def get_key(filename):
     return float(filename.split("_")[-1].replace(".csv", ""))
@@ -43,6 +72,8 @@ def load_data_chc():
     df_chc = pd.read_csv(last_snapshot, sep=", ")
     df_chc_bound = df_chc[df_chc["E_wrt_cluster"] < 0.0]
     df_chc_unbound = df_chc[df_chc["E_wrt_cluster"] >= 0.0]
+    action_diffs = get_action_diffs(df_chc_bound, df_chc_unbound)
+    df_chc_unbound["Jr"], df_chc_unbound["Jz"] = action_diffs[:, 0], action_diffs[:, 1]
 
     df_conserved_quantities_info = pd.read_csv(
         glob.glob(DATA_DIR + "chc_stream_no_stodolkiewicz/conserved_quantities_*.csv")[
@@ -300,7 +331,7 @@ def plot_streams(stream_info_dict):
     ax1 = axs[0, 0]
 
     for label, data in stream_info_dict.items():
-        Lz, Etot = data["L_z"], data["E_total"]
+        Lz, Etot = data["L_z"], data["E_wrt_host"]
         print(label, Etot.min(), Etot.max())
         ax1.scatter(Lz, Etot, c=colors[label], s=1, alpha=0.5, label=label)
 
@@ -314,55 +345,18 @@ def plot_streams(stream_info_dict):
     ax2 = axs[0, 1]
     legend_patches = []
     for label, data in stream_info_dict.items():
-        vz, z = data["vz"], data["z"] * 1000.0
+        Jr, Jz = data["Jr"], data["Jz"]
 
-        # Build KDE and evaluate it at each data point
-        kde = gaussian_kde(np.vstack([vz, z]))
-        kde_vals_at_data = kde(np.vstack([vz, z]))
-
-        # Sort KDE values at sample points, descending
-        sorted_kde_vals = np.sort(kde_vals_at_data)[::-1]
-
-        # Compute cumulative fraction of samples
-        cum_frac = np.cumsum(sorted_kde_vals)
-        cum_frac /= cum_frac[-1]  # normalize to 1
-
-        # Map desired data fractions to KDE thresholds
-        probs = [0.1, 0.5, 0.9]
-        levels = []
-        for p in probs:
-            idx = np.searchsorted(cum_frac, p)
-            levels.append(sorted_kde_vals[idx])
-
-        levels = sorted(levels)  # for contour plotting
-
-        # Plot KDE on grid
-        min_vz, max_vz = np.percentile(vz, 1.0), np.percentile(vz, 99.0)
-        min_z, max_z = np.percentile(z, 1.0), np.percentile(z, 99.0)
-
-        xi, yi = np.meshgrid(
-            np.linspace(min_vz, max_vz, 200),
-            np.linspace(min_z, max_z, 200),
-        )
-        zi = kde(np.vstack([xi.ravel(), yi.ravel()])).reshape(xi.shape)
-
-        contour = ax2.contour(
-            xi,
-            yi,
-            zi,
-            levels=levels,
-            colors=colors[label],
-            linewidths=0.6,
-            alpha=0.6,
+        sc = ax2.scatter(
+            Jr, Jz, c=colors[label], s=1, alpha=0.1, label=label
         )
 
-        # Create a proxy artist (colored patch) for the legend
-        legend_patches.append(mpatches.Patch(color=colors[label], label=label))
-
-    ax2.set_xlabel(r"$v_z$ [km/s]", fontsize=18)
-    ax2.set_ylabel(r"$z$ [pc]", fontsize=18)
+    ax2.set_xlabel(r"$J_{r}$ [kpc km/s]", fontsize=18)
+    ax2.set_ylabel(r"$J_{z}$ [kpc km/s]", fontsize=18)
+    ax2.set_xscale('log')
+    ax2.set_yscale('log')
     ax2.grid(linewidth=0.5, linestyle="--", c="k", alpha=0.5)
-    ax2.legend(handles=legend_patches, loc="best", fontsize=8)
+    ax2.legend(loc="best", markerscale=12, fontsize=8)
 
     # --- Panel 3: f(phi_1) = \int d \phi_2 rho(\phi_1, \phi_2) ---
     # Global bounds for consistency across panels
@@ -436,7 +430,7 @@ def plot_streams(stream_info_dict):
     ax4.set_xlabel(r"Time [Myr]", fontsize=18)
     ax4.set_ylabel(r"$M_{\rm unbound}/M_{\rm total}$", fontsize=18)
     ax4.set_aspect("auto")
-    ax4.set_xlim(0.0, 3000.0)
+    ax4.set_xlim(0.0, 2867.1)
     ax4.grid(linewidth=0.5, linestyle="--", alpha=0.5)
 
     plt.tight_layout()
@@ -454,13 +448,35 @@ def main():
     )
 
     df_chen = pd.read_csv(DATA_DIR + "chen_streams/chen_circular_orbit_stream.csv")
-    ref_point_vec_chen = np.array([10.0, 0.0, 0.0])
+    df_chen_bound, df_chen_unbound = (
+        df_chen[df_chen["source"] == "prog"],
+        df_chen[df_chen["source"] == "stream"],
+    )
+    action_diffs = get_action_diffs(df_chen_bound, df_chen_unbound)
+    df_chen_unbound["Jr"], df_chen_unbound["Jz"] = (
+        action_diffs[:, 0],
+        action_diffs[:, 1],
+    )
+
+    ref_point_vec_chen = np.array(
+        [
+            df_chen_bound["x"].mean(),
+            df_chen_bound["y"].mean(),
+            df_chen_bound["z"].mean(),
+        ]
+    )
 
     n_body_info_dict = load_data_n_body()
     df_n_body_bound, df_n_body_unbound = (
         n_body_info_dict["df_bound"],
         n_body_info_dict["df_unbound"],
     )
+    action_diffs = get_action_diffs(df_n_body_bound, df_n_body_unbound)
+    df_n_body_unbound["Jr"], df_n_body_unbound["Jz"] = (
+        action_diffs[:, 0],
+        action_diffs[:, 1],
+    )
+
     ref_point_vec_n_body = np.array(
         [
             df_n_body_bound["x"].mean(),
@@ -475,25 +491,25 @@ def main():
     stream_info_dict = {
         "CHC": {
             "L_z": df_chc_unbound["L_z"] / (1e3 * m_star),
-            "E_total": df_chc_unbound["E_total"] / (1e5 * m_star),
+            "E_wrt_host": df_chc_unbound["E_wrt_host"] / (1e5 * m_star),
             "phi_info": get_phi_info(df_chc_unbound, ref_point_vec_chc),
-            "z": df_chc_unbound["z"],
-            "vz": df_chc_unbound["vz"],
+            "Jr": df_chc_unbound["Jr"],
+            "Jz": df_chc_unbound["Jz"],
             "info_dict": chc_info_dict,
         },
         "Particle Spray (Chen et al. (2025))": {
-            "L_z": df_chen["L_z"] / 1e3,
-            "E_total": df_chen["E_total"] / (1e5),
-            "phi_info": get_phi_info(df_chen, ref_point_vec_chen),
-            "z": df_chen["z"],
-            "vz": df_chen["vz"],
+            "L_z": df_chen_unbound["L_z"] / 1e3,
+            "E_wrt_host": df_chen_unbound["E_wrt_host"] / (1e5),
+            "phi_info": get_phi_info(df_chen_unbound, ref_point_vec_chen),
+            "Jr": df_chen_unbound["Jr"],
+            "Jz": df_chen_unbound["Jz"],
         },
         r"Direct $N$-body": {
             "L_z": df_n_body_unbound["L_z"] / 1e3,
-            "E_total": df_n_body_unbound["E_total"] / (1e5 * m_star),
+            "E_wrt_host": df_n_body_unbound["E_wrt_host"] / (1e5 * m_star),
             "phi_info": get_phi_info(df_n_body_unbound, ref_point_vec_n_body),
-            "z": df_n_body_unbound["z"],
-            "vz": df_n_body_unbound["vz"],
+            "Jr": df_n_body_unbound["Jr"],
+            "Jz": df_n_body_unbound["Jz"],
             "info_dict": n_body_info_dict,
         },
     }

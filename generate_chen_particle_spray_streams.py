@@ -8,6 +8,16 @@ import gala.dynamics as gd
 from gala.dynamics import mockstream as ms
 from gala.units import galactic
 
+import agama  # to calculate action
+
+agama.setUnits(length=1, velocity=1, mass=1)  # working units: 1 Msun, 1 kpc, 1 km/s
+
+actFinder = agama.ActionFinder(
+    agama.Potential(
+        "/home/btcook/Desktop/github_repositories/CHC/agama/data/MWPotential2014.ini"
+    )
+)
+
 
 # Function to extract coordinates, velocities, E, Lz
 def extract_particle_data(
@@ -15,7 +25,7 @@ def extract_particle_data(
     stream_info_dict,
     source_label,
 ):
-    Etot = stream_info_dict["hamiltonian"].potential.total_energy(
+    E_wrt_host = stream_info_dict["hamiltonian"].potential.total_energy(
         particle.pos.xyz, particle.vel.d_xyz
     )
     Lz = particle.angular_momentum()[2]
@@ -29,7 +39,7 @@ def extract_particle_data(
             "vx": particle.vel.d_x.to(u.km / u.s).value,
             "vy": particle.vel.d_y.to(u.km / u.s).value,
             "vz": particle.vel.d_z.to(u.km / u.s).value,
-            "E_total": Etot.to((u.km / u.s) ** 2.0).value,
+            "E_wrt_host": E_wrt_host.to((u.km / u.s) ** 2.0).value,
             "L_z": Lz.to(u.kpc * u.km / u.s).value,
             "source": source_label,
         }
