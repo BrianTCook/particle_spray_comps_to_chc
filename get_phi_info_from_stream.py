@@ -22,7 +22,8 @@ import h5py
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["mathtext.fontset"] = "dejavuserif"
 
-DATA_DIR = "/home/btcook/Desktop/chc_ii_paper/circular_orbit_subdir/"
+ORBIT_TYPE = "eccentric_misaligned"
+DATA_DIR = f"/home/btcook/Desktop/krios_ii_paper/{ORBIT_TYPE}_orbit_subdir/"
 KPC_TO_PC = 1000.0
 KMS_TO_KPC_PER_MYR = 1 / 978.5
 
@@ -30,19 +31,20 @@ KMS_TO_KPC_PER_MYR = 1 / 978.5
 def get_key(filename):
     return float(filename.split("_")[-1].replace(".csv", ""))
 
+def load_data_krios():
+    krios_dir = DATA_DIR + f"krios_stream/{ORBIT_TYPE}_orbit_radial_pairing_exec_and_results/"
 
-def load_data_chc():
     all_files = sorted(
-        glob.glob(DATA_DIR + "chc_stream_no_stodolkiewicz/snapshot_job_id_*.csv"),
+        glob.glob(krios_dir + "snapshot_job_id_*.csv"),
         key=get_key,
     )
     last_snapshot = all_files[-1]
-    df_chc = pd.read_csv(last_snapshot, sep=", ")
-    df_chc_bound = df_chc[df_chc["E_wrt_cluster"] < 0.0]
-    df_chc_unbound = df_chc[df_chc["E_wrt_cluster"] >= 0.0]
+    df_krios = pd.read_csv(last_snapshot, sep=", ")
+    df_krios_bound = df_krios[df_krios["E_wrt_cluster"] < 0.0]
+    df_krios_unbound = df_krios[df_krios["E_wrt_cluster"] >= 0.0]
 
     df_conserved_quantities_info = pd.read_csv(
-        glob.glob(DATA_DIR + "chc_stream_no_stodolkiewicz/conserved_quantities_*.csv")[
+        glob.glob(krios_dir + "conserved_quantities_*.csv")[
             0
         ],
         header=0,
@@ -55,8 +57,8 @@ def load_data_chc():
     unbound_scf = 1.0 - df_conserved_quantities_info["M_tot_SCF"] / m_init_scf
 
     info_dict = {
-        "df_bound": df_chc_bound,
-        "df_unbound": df_chc_unbound,
+        "df_bound": df_krios_bound,
+        "df_unbound": df_krios_unbound,
         "times": t_scf,
         "unbound_frac": unbound_scf,
     }
@@ -78,7 +80,7 @@ def load_data_n_body():
         pd.DataFrame: Dataframe with converted physical units and computed values.
     """
     df = pd.read_csv(
-        DATA_DIR + "stream_frog/time_567.0.txt",
+        DATA_DIR + "n_body_stream/",
         sep="\t",
         names=["x", "y", "z", "vx", "vy", "vz", "m", "U_int", "U_c"],
         index_col=False,
@@ -281,20 +283,20 @@ def get_phi_info(df, ref_point_vec):
 def plot_phi1_phi2_kde_panels(stream_info_dict):
     """
     Create a 3-row, 1-column plot:
-    - Row 1: KDE for CHC (phi1 vs phi2)
+    - Row 1: KDE for KRIOS (phi1 vs phi2)
     - Row 2: KDE for Particle Spray
     - Row 3: KDE for Direct N-body
     """
     fig, axs = plt.subplots(3, 1, figsize=(8, 14), sharex=True, sharey=True)
 
     codenames_ordered = [
-        "CHC",
+        "KRIOS",
         "Chen",
         "N-body",
     ]
 
     label_dict = {
-        "CHC": "CHC",
+        "KRIOS": "KRIOS",
         "Chen": "Particle Spray (Chen et al. (2025))",
         "N-body": r"Direct $N$-body",
     }
@@ -313,11 +315,11 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
         ]
     )
 
-    n_phi1 = 200
+    n_phi1 = 100
     min_phi1, max_phi1 = np.percentile(all_phi1, [0.5, 99.5])
     phi1_bins = np.linspace(min_phi1, max_phi1, n_phi1)
 
-    n_phi2 = 200
+    n_phi2 = 100
     min_phi2, max_phi2 = np.percentile(all_phi2, [0.5, 99.5])
     phi2_bins = np.linspace(min_phi2, max_phi2, n_phi2)
 
@@ -362,11 +364,11 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
         ax.set_title(label_dict[codename], fontsize=14)
         ax.grid(linewidth=0.5, linestyle="--", alpha=0.5)
 
-    zi_chc = zi_dict["CHC"]
+    zi_krios = zi_dict["KRIOS"]
     zi_chen = zi_dict["Chen"]
     zi_n_body = zi_dict[r"N-body"]
 
-    print(f"KLD for CHC: {np.sum(zi_chc * np.log(zi_chc/zi_n_body))}")
+    print(f"KLD for KRIOS: {np.sum(zi_krios * np.log(zi_krios/zi_n_body))}")
     print(f"KLD for particle spray: {np.sum(zi_chen * np.log(zi_chen/zi_n_body))}")
 
     axs[-1].set_xlabel(r"$\phi_1$ [deg]", fontsize=16)
@@ -382,24 +384,24 @@ def plot_phi1_phi2_kde_panels(stream_info_dict):
 
 
 def main():
-    chc_info_dict = load_data_chc()
-    df_chc_bound, df_chc_unbound = (
-        chc_info_dict["df_bound"],
-        chc_info_dict["df_unbound"],
+    krios_info_dict = load_data_krios()
+    df_krios_bound, df_krios_unbound = (
+        krios_info_dict["df_bound"],
+        krios_info_dict["df_unbound"],
     )
-    ref_point_vec_chc = np.array(
+    ref_point_vec_krios = np.array(
         [
-            df_chc_bound["x"].mean(),
-            df_chc_bound["y"].mean(),
-            df_chc_bound["z"].mean(),
-            df_chc_bound["vx"].mean(),
-            df_chc_bound["vy"].mean(),
-            df_chc_bound["vz"].mean(),
+            df_krios_bound["x"].mean(),
+            df_krios_bound["y"].mean(),
+            df_krios_bound["z"].mean(),
+            df_krios_bound["vx"].mean(),
+            df_krios_bound["vy"].mean(),
+            df_krios_bound["vz"].mean(),
         ]
     )
-    chc_info_dict["phi_info"] = get_phi_info(df_chc_unbound, ref_point_vec_chc)
+    krios_info_dict["phi_info"] = get_phi_info(df_krios_unbound, ref_point_vec_krios)
 
-    df_chen = pd.read_csv(DATA_DIR + "chen_streams/chen_circular_orbit_stream.csv")
+    df_chen = pd.read_csv(DATA_DIR + f"chen_stream/chen_{ORBIT_TYPE}_orbit_stream.csv")
     df_chen_bound, df_chen_unbound = (
         df_chen[df_chen["source"] == "prog"],
         df_chen[df_chen["source"] == "stream"],
@@ -433,9 +435,9 @@ def main():
     )
     n_body_info_dict["phi_info"] = get_phi_info(df_n_body_unbound, ref_point_vec_n_body)
 
-    # CHC IOMs have to be convert to specific IOMs
+    # KRIOS IOMs have to be convert to specific IOMs
     stream_info_dict = {
-        "CHC": chc_info_dict,
+        "KRIOS": krios_info_dict,
         "Chen": chen_phi_info,
         "N-body": n_body_info_dict,
     }

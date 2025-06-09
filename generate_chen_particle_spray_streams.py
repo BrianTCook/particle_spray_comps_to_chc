@@ -14,7 +14,7 @@ agama.setUnits(length=1, velocity=1, mass=1)  # working units: 1 Msun, 1 kpc, 1 
 
 actFinder = agama.ActionFinder(
     agama.Potential(
-        "/home/btcook/Desktop/github_repositories/CHC/agama/data/MWPotential2014.ini"
+        "/home/btcook/Desktop/github_repositories/CHC/agama/data/PriceWhelan22.ini"
     )
 )
 
@@ -79,19 +79,28 @@ def create_stream(stream_info_dict):
 
 if __name__ == "__main__":
 
-    host_pot = gp.BovyMWPotential2014(units=galactic)
+    orbit_type = "eccentric_misaligned"
+    progenitor_type = "plummer"
+
+    host_pot = gp.MilkyWayPotential2022(units=galactic)
     host_hamiltonian = gp.Hamiltonian(host_pot)
 
-    # Define initial circular orbit
-    R = 10.0 * u.kpc
-    pos = [R.to(u.kpc).value, 0.0, 0.0] * u.kpc
+    if orbit_type == "circular":
+        # Define initial circular orbit
+        R = 15.19121074 * u.kpc
+        pos = [R.to(u.kpc).value, 0.0, 0.0] * u.kpc
 
-    vT = host_pot.circular_velocity(pos)[0]
-    vel = [0, vT.to(u.km / u.s).value, 0] * (u.km / u.s)
+        vT = host_pot.circular_velocity(pos)[0]
+        vel = [0, vT.to(u.km / u.s).value, 0] * (u.km / u.s)
 
-    n_steps = 2000
-    t_orbit = (2 * np.pi * R / vT).to(u.Myr)
-    t_tot = 10.0 * t_orbit
+        print(R, vT)
+
+    else:
+        pos = [2.87007938, -1.94975018, -9.73906145] * u.kpc
+        vel = [229.90986053, -138.85437766, -11.09853919] * (u.km / u.s)
+
+    n_steps = 1000
+    t_tot = 3000.0 * u.Myr
 
     # load King model ICs from CHC
     DATA_DIR = "/home/btcook/Desktop/github_repositories/CHC/data/"
@@ -105,23 +114,33 @@ if __name__ == "__main__":
     n_stars = len(positions)
     masses = (1.0 / n_stars) * np.ones(n_stars) * u.Msun
 
-    # compute SCF expansion coefficients using Lowing (2011) convention, N-body units
-    NMAX, LMAX = 5, 5
-    S, T = gp.scf.compute_coeffs_discrete(
-        positions, mass=masses, nmax=NMAX, lmax=LMAX, r_s=1.0
-    )
-
     # set up the progenitor
     prog_mass = 1.0e5 * u.Msun
     prog_scale_radius = 24.5621 * u.pc  # this is r_vir from CHC, r_hm is 20 pc
 
-    prog_pot = gp.scf.SCFPotential(
-        Snlm=S,
-        Tnlm=T,
-        m=prog_mass.to(u.Msun).value,
-        r_s=prog_scale_radius.to(u.kpc).value,
-        units=galactic,
-    )
+    if progenitor_type == "scf":
+        # compute SCF expansion coefficients using Lowing (2011) convention, N-body units
+        NMAX, LMAX = 10, 5
+        S, T = gp.scf.compute_coeffs_discrete(
+            positions, mass=masses, nmax=NMAX, lmax=LMAX, r_s=1.0
+        )
+
+        prog_pot = gp.scf.SCFPotential(
+            Snlm=S,
+            Tnlm=T,
+            m=prog_mass.to(u.Msun).value,
+            r_s=prog_scale_radius.to(u.kpc).value,
+            units=galactic,
+        )
+
+    else:
+
+        prog_pot = gp.PlummerPotential(
+            m=prog_mass.to(u.Msun).value,
+            b=prog_scale_radius.to(u.kpc).value,
+            units=galactic,
+        )
+
     prog_w0 = gd.PhaseSpacePosition(
         pos=pos,
         vel=vel,
@@ -139,4 +158,6 @@ if __name__ == "__main__":
     }
 
     df = create_stream(stream_info_dict)
-    df.to_csv("chen_circular_orbit_stream.csv", index=False)
+    df.to_csv(
+        f"chen_{orbit_type}_orbit_{progenitor_type}_progenitor_stream.csv", index=False
+    )
