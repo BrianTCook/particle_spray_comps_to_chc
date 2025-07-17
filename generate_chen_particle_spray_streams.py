@@ -33,12 +33,12 @@ def extract_particle_data(
     # phi1, phi2, mu_phi1, mu_phi2, dist, radial velocity
     return pd.DataFrame(
         {
-            "x": particle.pos.x.to(u.kpc).value,
-            "y": particle.pos.y.to(u.kpc).value,
-            "z": particle.pos.z.to(u.kpc).value,
-            "vx": particle.vel.d_x.to(u.km / u.s).value,
-            "vy": particle.vel.d_y.to(u.km / u.s).value,
-            "vz": particle.vel.d_z.to(u.km / u.s).value,
+            "x": particle.pos.x.to_value(u.kpc),
+            "y": particle.pos.y.to_value(u.kpc),
+            "z": particle.pos.z.to_value(u.kpc),
+            "vx": particle.vel.d_x.to_value(u.km / u.s),
+            "vy": particle.vel.d_y.to_value(u.km / u.s),
+            "vz": particle.vel.d_z.to_value(u.km / u.s),
             "E_wrt_host": E_wrt_host.to((u.km / u.s) ** 2.0).value,
             "L_z": Lz.to(u.kpc * u.km / u.s).value,
             "source": source_label,
@@ -85,22 +85,41 @@ if __name__ == "__main__":
     host_pot = gp.MilkyWayPotential2022(units=galactic)
     host_hamiltonian = gp.Hamiltonian(host_pot)
 
+    N_ORBITS = 8
+
     if orbit_type == "circular":
-        # Define initial circular orbit
-        R = 15.19121074 * u.kpc
-        pos = [R.to(u.kpc).value, 0.0, 0.0] * u.kpc
+        # Define initial circular orbit, using 1.0 kpc or 16.95994177 kpc
+        r_circ = 16.69302028
+        pos = [r_circ, 0.0, 0.0] * u.kpc
 
         vT = host_pot.circular_velocity(pos)[0]
-        vel = [0, vT.to(u.km / u.s).value, 0] * (u.km / u.s)
+        vel = [0, vT.to_value(u.km / u.s), 0] * (u.km / u.s)
 
-        print(R, vT)
+        print(np.round(vT, 8))
+
+        period = 2 * np.pi * np.linalg.norm(pos) / np.linalg.norm(vel)
+        t_tot = N_ORBITS * period
+
+        print(f"orbital period: {np.round(period.to_value(u.Myr), 3)}")
+        print(
+            f"angular momentum: {np.round(np.linalg.norm(pos) * np.linalg.norm(vel) / 1000.0, 3)} 10^3 kpc km/s"
+        )
+        print(
+            f"total energy: {np.round(host_pot.total_energy(pos, vel).to_value((u.km/u.s)**2.0) / 1e5, 3)} 10^5 (km/s)^2"
+        )
 
     else:
-        pos = [2.87007938, -1.94975018, -9.73906145] * u.kpc
-        vel = [229.90986053, -138.85437766, -11.09853919] * (u.km / u.s)
+        pos = [0.98105761, 3.15561992, 9.55769116] * u.kpc
+        vel = [-51.13925321, 55.50809281, 261.59895211] * (u.km / u.s)
 
-    n_steps = 1000
-    t_tot = 3000.0 * u.Myr
+        phase_space = gd.PhaseSpacePosition(pos=pos.T, vel=vel.T)
+        orbit = host_pot.integrate_orbit(phase_space, dt=0.1 * u.Myr, n_steps=10000)
+
+        t_tot = N_ORBITS * orbit.physicsspherical.estimate_period()["r"][0]
+
+    dt = 0.1 * u.Myr
+
+    n_steps = t_tot / dt
 
     # load King model ICs from CHC
     DATA_DIR = "/home/btcook/Desktop/github_repositories/CHC/data/"
@@ -128,16 +147,16 @@ if __name__ == "__main__":
         prog_pot = gp.scf.SCFPotential(
             Snlm=S,
             Tnlm=T,
-            m=prog_mass.to(u.Msun).value,
-            r_s=prog_scale_radius.to(u.kpc).value,
+            m=prog_mass.to_value(u.Msun),
+            r_s=prog_scale_radius.to_value(u.kpc),
             units=galactic,
         )
 
     else:
 
         prog_pot = gp.PlummerPotential(
-            m=prog_mass.to(u.Msun).value,
-            b=prog_scale_radius.to(u.kpc).value,
+            m=prog_mass.to_value(u.Msun),
+            b=prog_scale_radius.to_value(u.kpc),
             units=galactic,
         )
 

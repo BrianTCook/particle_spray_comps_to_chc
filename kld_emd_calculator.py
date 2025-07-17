@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.colors import LogNorm
 
+import ot  # POT: Python Optimal Transport
+from scipy.spatial.distance import cdist
+
 import gala.coordinates as gc
 import gala.dynamics as gd
 import astropy.coordinates as coord
@@ -26,7 +29,7 @@ plt.rcParams["mathtext.fontset"] = "dejavuserif"
 orbit_type = "eccentric_misaligned"
 pairing_type = "radial"
 
-DATA_DIR = f"/home/btcook/Desktop/krios_ii_paper/{orbit_type}_orbit_subdir/"
+DATA_DIR = f"/home/btcook/Desktop/krios_ii_paper/validation_tests/{orbit_type}_orbit_subdir/"
 KMS_TO_KPC_PER_MYR = 1 / 978.5
 
 import agama  # to calculate action
@@ -35,7 +38,7 @@ agama.setUnits(length=1, velocity=1, mass=1)  # working units: 1 Msun, 1 kpc, 1 
 
 actFinder = agama.ActionFinder(
     agama.Potential(
-        "/home/btcook/Desktop/github_repositories/CHC/agama/data/MWPotential2014.ini"
+        "/home/btcook/Desktop/github_repositories/CHC/agama/data/PriceWhelan22.ini"
     )
 )
 
@@ -54,11 +57,12 @@ def get_key(filename):
 
 
 def load_data_krios():
+    snapshot_files = (
+        DATA_DIR
+        + f"krios_stream/{orbit_type}_orbit_{pairing_type}_pairing_intermediate_timestep_fewer_neighbors_comparison_exec_and_results/snapshot_job_id_*.csv"
+    )
     all_files = sorted(
-        glob.glob(
-            DATA_DIR
-            + f"krios_stream/{orbit_type}_orbit_{pairing_type}_pairing_exec_and_results/snapshot_job_id_*.csv"
-        ),
+        glob.glob(snapshot_files),
         key=get_key,
     )
     last_snapshot = all_files[-1]
@@ -69,7 +73,7 @@ def load_data_krios():
     df_conserved_quantities_info = pd.read_csv(
         glob.glob(
             DATA_DIR
-            + f"krios_stream/{orbit_type}_orbit_{pairing_type}_pairing_exec_and_results/conserved_quantities_*.csv"
+            + f"krios_stream/{orbit_type}_orbit_{pairing_type}_pairing_intermediate_timestep_fewer_neighbors_comparison_exec_and_results/conserved_quantities_*.csv"
         )[0],
         header=0,
         sep=", ",
@@ -279,6 +283,25 @@ def get_phi_info(df, ref_point_vec):
     return phi_info_dict
 
 
+def earth_mover_distance(zi_one, zi_two):
+    # Flatten the distributions
+    zi_one_flat = zi_one.flatten()
+    zi_two_flat = zi_two.flatten()
+
+    # Ensure they're normalized
+    assert np.allclose(zi_one_flat.sum(), 1.0)
+    assert np.allclose(zi_two_flat.sum(), 1.0)
+
+    # Create the ground distance matrix using Euclidean distance
+    grid = np.array(
+        [(i, j) for i in range(zi_one.shape[0]) for j in range(zi_one.shape[1])]
+    )
+    D = cdist(grid, grid, metric="euclidean")  # shape = (N, N)
+
+    # Compute Earth Mover’s Distance (symmetric)
+    return ot.emd2(zi_one_flat, zi_two_flat, D)
+
+
 def compute_kld_angles(stream_info_dict):
     """
     Compute Kullback-Leibler divergence for different stream models.
@@ -304,13 +327,9 @@ def compute_kld_angles(stream_info_dict):
         ]
     )
 
-    lower, upper = 0.0, 100.0 #2.275, 97.725
-
-    n_phi1 = 100
-    phi1_bins = np.linspace(*np.percentile(all_phi1, [lower, upper]), n_phi1)
-
-    n_phi2 = 100
-    phi2_bins = np.linspace(*np.percentile(all_phi2, [lower, upper]), n_phi2)
+    lower, upper = 5.0, 95.0
+    phi1_bins = np.arange(*np.percentile(all_phi1, [lower, upper]), 1.0)
+    phi2_bins = np.arange(*np.percentile(all_phi2, [lower, upper]), 1.0)
 
     phi1_min, phi1_max = np.amin(all_phi1), np.amax(all_phi1)
     phi2_min, phi2_max = np.amin(all_phi2), np.amax(all_phi2)
@@ -342,9 +361,9 @@ def compute_kld_angles(stream_info_dict):
 
         # Plot scatter
         ax.scatter(phi1, phi2, c="k", s=0.5, alpha=1.0, edgecolors="none", linewidths=0)
-        ax.set_xlim(phi1_min, phi1_max)
-        ax.set_ylim(phi2_min, phi2_max)
-        #ax.set_aspect("equal")
+        ax.set_xlim(phi1_min-1.0, phi1_max+1.0)
+        ax.set_ylim(phi2_min-1.0, phi2_max+1.0)
+        # ax.set_aspect("equal")
         ax.annotate(
             codename,
             xy=(0.7, 0.8),
@@ -362,23 +381,29 @@ def compute_kld_angles(stream_info_dict):
         zi /= np.sum(zi)  # Normalize to make it a probability distribution
         zi_dict[codename] = zi
 
+        plt.figure()
+        plt.imshow(zi)
+        plt.show()
+
     # Shared axis labels
     fig.text(0.5, 0.03, r"$\phi_1$ [deg]", ha="center", fontsize=24)
     fig.text(
         0.07, 0.5, r"$\phi_2$ [deg]", va="center", fontsize=24, rotation="vertical"
     )
 
-    plt.savefig("phi1_phi2_dda_scatter.png", dpi=800, bbox_inches="tight")
+    plt.savefig("phi1_phi2_dda_scatter.png", dpi=800)#, bbox_inches="tight")
     plt.close()
 
     # Compute KLD
     for nbody_key in nbody_references:
         zi_nbody = zi_dict[nbody_key]
-        print(f"\nUsing {nbody_key} as reference for sky-plane angle KLDs:")
+        print(f"\nUsing {nbody_key} as reference for sky-plane angle KLDs and EMDs:")
         for codename in codenames_to_compare:
             zi = zi_dict[codename]
             kld = np.sum(np.multiply(zi_nbody, np.log(np.divide(zi_nbody, zi))))
+            emd = earth_mover_distance(zi_nbody, zi)
             print(f"  KLD({nbody_key} || {codename}) = {kld:.3f}")
+            print(f"  EMD({nbody_key} || {codename}) = {emd:.3f}")
 
 
 def compute_kld_actions(stream_info_dict):
@@ -406,13 +431,9 @@ def compute_kld_actions(stream_info_dict):
         ]
     )
 
-    lower, upper = 0.0, 100.0 #2.275, 97.725
-
-    n_Lz = 100
-    Lz_bins = np.linspace(*np.percentile(all_Lz, [lower, upper]), n_Lz)
-
-    n_Jr = 100
-    Jr_bins = np.linspace(*np.percentile(all_Jr, [lower, upper]), n_Jr)
+    lower, upper = 5.0, 95.0
+    Lz_bins = np.linspace(*np.percentile(all_Lz, [lower, upper]), 10)
+    Jr_bins = np.linspace(*np.percentile(all_Jr, [lower, upper]), 10)
 
     # Estimate density for each codename
     zi_dict = {}
@@ -430,11 +451,13 @@ def compute_kld_actions(stream_info_dict):
     # Compute KLD
     for nbody_key in nbody_references:
         zi_nbody = zi_dict[nbody_key]
-        print(f"\nUsing {nbody_key} as reference for action KLDs:")
+        print(f"\nUsing {nbody_key} as reference for action KLDs and EMDs:")
         for codename in codenames_to_compare:
             zi = zi_dict[codename]
             kld = np.sum(np.multiply(zi_nbody, np.log(np.divide(zi_nbody, zi))))
+            emd = earth_mover_distance(zi_nbody, zi)
             print(f"  KLD({codename} || {nbody_key}) = {kld:.3f}")
+            print(f"  EMD({codename} || {nbody_key}) = {emd:.3f}")
 
 
 def main():
@@ -461,7 +484,10 @@ def main():
     """
     particle-spray
     """
-    df_chen = pd.read_csv(DATA_DIR + f"chen_stream/chen_{orbit_type}_orbit_stream.csv")
+    df_chen = pd.read_csv(
+        DATA_DIR
+        + f"chen_stream/mw2022_results/chen_{orbit_type}_orbit_plummer_progenitor_stream.csv"
+    )
     df_chen_bound, df_chen_unbound = (
         df_chen[df_chen["source"] == "prog"],
         df_chen[df_chen["source"] == "stream"],
@@ -480,8 +506,8 @@ def main():
     """
     N-body, first seed
     """
-    first_seed_txt_filename = DATA_DIR + "/n_body_stream/last_snapshot_first_seed.txt"
-    first_seed_hf5_filename = DATA_DIR + "/n_body_stream/first_seed.hf5"
+    first_seed_txt_filename = DATA_DIR + "n_body_stream/mw2022_results/last_snapshot_first_seed.txt"
+    first_seed_hf5_filename = DATA_DIR + "n_body_stream/mw2022_results/first_seed.hf5"
     n_body_info_dict_first_seed = load_data_n_body(
         first_seed_txt_filename, first_seed_hf5_filename
     )
@@ -503,8 +529,8 @@ def main():
     """
     N-body, second seed
     """
-    second_seed_txt_filename = DATA_DIR + "/n_body_stream/last_snapshot_second_seed.txt"
-    second_seed_hf5_filename = DATA_DIR + "/n_body_stream/second_seed.hf5"
+    second_seed_txt_filename = DATA_DIR + "n_body_stream/mw2022_results/last_snapshot_second_seed.txt"
+    second_seed_hf5_filename = DATA_DIR + "n_body_stream/mw2022_results/second_seed.hf5"
     n_body_info_dict_second_seed = load_data_n_body(
         second_seed_txt_filename, second_seed_hf5_filename
     )
