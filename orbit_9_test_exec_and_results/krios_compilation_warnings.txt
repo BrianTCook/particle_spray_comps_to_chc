@@ -1,0 +1,514 @@
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘std::array<double, 3> HostPotential::get_host_acceleration_at_point(const double*)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:251:12: warning: unused variable ‘r_wrt_host’ [-Wunused-variable]
+  251 |     double r_wrt_host{host_frame.get_r(particle_at_point)};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘int HostPotential::ode_gsl_rhs_impl(double, const double*, double*)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:356:50: warning: unused parameter ‘t’ [-Wunused-parameter]
+  356 | int HostPotential::ode_gsl_rhs_impl(double const t, double const *const y, double *const f)
+      |                                     ~~~~~~~~~~~~~^
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_sph_jacobian_zvx(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:564:12: warning: unused variable ‘fvphiprime’ [-Wunused-variable]
+  564 |     double fvphiprime{one_sph_derivative[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:572:12: warning: unused variable ‘dphiprime_fvrprime’ [-Wunused-variable]
+  572 |     double dphiprime_fvrprime{two_sph_derivatives[6]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:573:12: warning: unused variable ‘dphiprime_fvthetaprime’ [-Wunused-variable]
+  573 |     double dphiprime_fvthetaprime{two_sph_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:574:12: warning: unused variable ‘dphiprime_fvphiprime’ [-Wunused-variable]
+  574 |     double dphiprime_fvphiprime{two_sph_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_sph_jacobian_xvy(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:615:12: warning: unused variable ‘dphiprime_fvthetaprime’ [-Wunused-variable]
+  615 |     double dphiprime_fvthetaprime{two_sph_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_sph_jacobian_yvy(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:659:12: warning: unused variable ‘dphiprime_fvthetaprime’ [-Wunused-variable]
+  659 |     double dphiprime_fvthetaprime{two_sph_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_sph_jacobian_zvy(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:693:12: warning: unused variable ‘fvphiprime’ [-Wunused-variable]
+  693 |     double fvphiprime{one_sph_derivative[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:701:12: warning: unused variable ‘dphiprime_fvrprime’ [-Wunused-variable]
+  701 |     double dphiprime_fvrprime{two_sph_derivatives[6]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:702:12: warning: unused variable ‘dphiprime_fvthetaprime’ [-Wunused-variable]
+  702 |     double dphiprime_fvthetaprime{two_sph_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:703:12: warning: unused variable ‘dphiprime_fvphiprime’ [-Wunused-variable]
+  703 |     double dphiprime_fvphiprime{two_sph_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_sph_jacobian_xvz(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:735:12: warning: unused variable ‘fvphiprime’ [-Wunused-variable]
+  735 |     double fvphiprime{one_sph_derivative[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:739:12: warning: unused variable ‘drprime_fvphiprime’ [-Wunused-variable]
+  739 |     double drprime_fvphiprime{two_sph_derivatives[2]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:742:12: warning: unused variable ‘dthetaprime_fvphiprime’ [-Wunused-variable]
+  742 |     double dthetaprime_fvphiprime{two_sph_derivatives[5]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:745:12: warning: unused variable ‘dphiprime_fvphiprime’ [-Wunused-variable]
+  745 |     double dphiprime_fvphiprime{two_sph_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_sph_jacobian_yvz(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:779:12: warning: unused variable ‘fvphiprime’ [-Wunused-variable]
+  779 |     double fvphiprime{one_sph_derivative[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:783:12: warning: unused variable ‘drprime_fvphiprime’ [-Wunused-variable]
+  783 |     double drprime_fvphiprime{two_sph_derivatives[2]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:786:12: warning: unused variable ‘dthetaprime_fvphiprime’ [-Wunused-variable]
+  786 |     double dthetaprime_fvphiprime{two_sph_derivatives[5]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:789:12: warning: unused variable ‘dphiprime_fvphiprime’ [-Wunused-variable]
+  789 |     double dphiprime_fvphiprime{two_sph_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:791:12: warning: unused variable ‘partial_r_fvz’ [-Wunused-variable]
+  791 |     double partial_r_fvz{cos_theta_wrt_host * drprime_fvrprime - sin_theta_wrt_host * drprime_fvthetaprime};
+      |            ^~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:792:12: warning: unused variable ‘partial_theta_fvz’ [-Wunused-variable]
+  792 |     double partial_theta_fvz{cos_theta_wrt_host * dthetaprime_fvrprime - sin_theta_wrt_host * fvrprime - sin_theta_wrt_host * dthetaprime_fvthetaprime - cos_theta_wrt_host * fvthetaprime};
+      |            ^~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:793:12: warning: unused variable ‘partial_phi_fvz’ [-Wunused-variable]
+  793 |     double partial_phi_fvz{cos_theta_wrt_host * dphiprime_fvrprime - sin_theta_wrt_host * dphiprime_fvthetaprime};
+      |            ^~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_sph_jacobian_zvz(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:820:12: warning: unused variable ‘fvphiprime’ [-Wunused-variable]
+  820 |     double fvphiprime{one_sph_derivative[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:824:12: warning: unused variable ‘drprime_fvphiprime’ [-Wunused-variable]
+  824 |     double drprime_fvphiprime{two_sph_derivatives[2]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:827:12: warning: unused variable ‘dthetaprime_fvphiprime’ [-Wunused-variable]
+  827 |     double dthetaprime_fvphiprime{two_sph_derivatives[5]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:828:12: warning: unused variable ‘dphiprime_fvrprime’ [-Wunused-variable]
+  828 |     double dphiprime_fvrprime{two_sph_derivatives[6]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:829:12: warning: unused variable ‘dphiprime_fvthetaprime’ [-Wunused-variable]
+  829 |     double dphiprime_fvthetaprime{two_sph_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:830:12: warning: unused variable ‘dphiprime_fvphiprime’ [-Wunused-variable]
+  830 |     double dphiprime_fvphiprime{two_sph_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_cyl_jacobian_xvx(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:929:12: warning: unused variable ‘z_wrt_host’ [-Wunused-variable]
+  929 |     double z_wrt_host{y[2] - host_frame.get_frame_position()[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:934:12: warning: unused variable ‘fvzprime’ [-Wunused-variable]
+  934 |     double fvzprime{one_cyl_derivative[2]};
+      |            ^~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:938:12: warning: unused variable ‘drhoprime_fvzprime’ [-Wunused-variable]
+  938 |     double drhoprime_fvzprime{two_cyl_derivatives[2]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:941:12: warning: unused variable ‘dvarphiprime_fvzprime’ [-Wunused-variable]
+  941 |     double dvarphiprime_fvzprime{two_cyl_derivatives[5]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:942:12: warning: unused variable ‘dzprime_fvrhoprime’ [-Wunused-variable]
+  942 |     double dzprime_fvrhoprime{two_cyl_derivatives[6]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:943:12: warning: unused variable ‘dzprime_fvvarphiprime’ [-Wunused-variable]
+  943 |     double dzprime_fvvarphiprime{two_cyl_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:944:12: warning: unused variable ‘dzprime_fvzprime’ [-Wunused-variable]
+  944 |     double dzprime_fvzprime{two_cyl_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_cyl_jacobian_yvx(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:959:12: warning: unused variable ‘z_wrt_host’ [-Wunused-variable]
+  959 |     double z_wrt_host{y[2] - host_frame.get_frame_position()[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:964:12: warning: unused variable ‘fvzprime’ [-Wunused-variable]
+  964 |     double fvzprime{one_cyl_derivative[2]};
+      |            ^~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:968:12: warning: unused variable ‘drhoprime_fvzprime’ [-Wunused-variable]
+  968 |     double drhoprime_fvzprime{two_cyl_derivatives[2]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:971:12: warning: unused variable ‘dvarphiprime_fvzprime’ [-Wunused-variable]
+  971 |     double dvarphiprime_fvzprime{two_cyl_derivatives[5]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:972:12: warning: unused variable ‘dzprime_fvrhoprime’ [-Wunused-variable]
+  972 |     double dzprime_fvrhoprime{two_cyl_derivatives[6]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:973:12: warning: unused variable ‘dzprime_fvvarphiprime’ [-Wunused-variable]
+  973 |     double dzprime_fvvarphiprime{two_cyl_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:974:12: warning: unused variable ‘dzprime_fvzprime’ [-Wunused-variable]
+  974 |     double dzprime_fvzprime{two_cyl_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_cyl_jacobian_zvx(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:989:12: warning: unused variable ‘z_wrt_host’ [-Wunused-variable]
+  989 |     double z_wrt_host{y[2] - host_frame.get_frame_position()[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:992:12: warning: unused variable ‘fvrhoprime’ [-Wunused-variable]
+  992 |     double fvrhoprime{one_cyl_derivative[0]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:993:12: warning: unused variable ‘fvvarphiprime’ [-Wunused-variable]
+  993 |     double fvvarphiprime{one_cyl_derivative[1]};
+      |            ^~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:994:12: warning: unused variable ‘fvzprime’ [-Wunused-variable]
+  994 |     double fvzprime{one_cyl_derivative[2]};
+      |            ^~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:996:12: warning: unused variable ‘drhoprime_fvrhoprime’ [-Wunused-variable]
+  996 |     double drhoprime_fvrhoprime{two_cyl_derivatives[0]};
+      |            ^~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:997:12: warning: unused variable ‘drhoprime_fvvarphiprime’ [-Wunused-variable]
+  997 |     double drhoprime_fvvarphiprime{two_cyl_derivatives[1]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:998:12: warning: unused variable ‘drhoprime_fvzprime’ [-Wunused-variable]
+  998 |     double drhoprime_fvzprime{two_cyl_derivatives[2]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:999:12: warning: unused variable ‘dvarphiprime_fvrhoprime’ [-Wunused-variable]
+  999 |     double dvarphiprime_fvrhoprime{two_cyl_derivatives[3]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1000:12: warning: unused variable ‘dvarphiprime_fvvarphiprime’ [-Wunused-variable]
+ 1000 |     double dvarphiprime_fvvarphiprime{two_cyl_derivatives[4]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1001:12: warning: unused variable ‘dvarphiprime_fvzprime’ [-Wunused-variable]
+ 1001 |     double dvarphiprime_fvzprime{two_cyl_derivatives[5]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1004:12: warning: unused variable ‘dzprime_fvzprime’ [-Wunused-variable]
+ 1004 |     double dzprime_fvzprime{two_cyl_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_cyl_jacobian_xvy(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:1019:12: warning: unused variable ‘z_wrt_host’ [-Wunused-variable]
+ 1019 |     double z_wrt_host{y[2] - host_frame.get_frame_position()[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1024:12: warning: unused variable ‘fvzprime’ [-Wunused-variable]
+ 1024 |     double fvzprime{one_cyl_derivative[2]};
+      |            ^~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1028:12: warning: unused variable ‘drhoprime_fvzprime’ [-Wunused-variable]
+ 1028 |     double drhoprime_fvzprime{two_cyl_derivatives[2]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1031:12: warning: unused variable ‘dvarphiprime_fvzprime’ [-Wunused-variable]
+ 1031 |     double dvarphiprime_fvzprime{two_cyl_derivatives[5]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1032:12: warning: unused variable ‘dzprime_fvrhoprime’ [-Wunused-variable]
+ 1032 |     double dzprime_fvrhoprime{two_cyl_derivatives[6]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1033:12: warning: unused variable ‘dzprime_fvvarphiprime’ [-Wunused-variable]
+ 1033 |     double dzprime_fvvarphiprime{two_cyl_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1034:12: warning: unused variable ‘dzprime_fvzprime’ [-Wunused-variable]
+ 1034 |     double dzprime_fvzprime{two_cyl_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_cyl_jacobian_yvy(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:1049:12: warning: unused variable ‘z_wrt_host’ [-Wunused-variable]
+ 1049 |     double z_wrt_host{y[2] - host_frame.get_frame_position()[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1054:12: warning: unused variable ‘fvzprime’ [-Wunused-variable]
+ 1054 |     double fvzprime{one_cyl_derivative[2]};
+      |            ^~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1058:12: warning: unused variable ‘drhoprime_fvzprime’ [-Wunused-variable]
+ 1058 |     double drhoprime_fvzprime{two_cyl_derivatives[2]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1061:12: warning: unused variable ‘dvarphiprime_fvzprime’ [-Wunused-variable]
+ 1061 |     double dvarphiprime_fvzprime{two_cyl_derivatives[5]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1062:12: warning: unused variable ‘dzprime_fvrhoprime’ [-Wunused-variable]
+ 1062 |     double dzprime_fvrhoprime{two_cyl_derivatives[6]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1063:12: warning: unused variable ‘dzprime_fvvarphiprime’ [-Wunused-variable]
+ 1063 |     double dzprime_fvvarphiprime{two_cyl_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1064:12: warning: unused variable ‘dzprime_fvzprime’ [-Wunused-variable]
+ 1064 |     double dzprime_fvzprime{two_cyl_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_cyl_jacobian_zvy(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:1079:12: warning: unused variable ‘z_wrt_host’ [-Wunused-variable]
+ 1079 |     double z_wrt_host{y[2] - host_frame.get_frame_position()[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1082:12: warning: unused variable ‘fvrhoprime’ [-Wunused-variable]
+ 1082 |     double fvrhoprime{one_cyl_derivative[0]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1083:12: warning: unused variable ‘fvvarphiprime’ [-Wunused-variable]
+ 1083 |     double fvvarphiprime{one_cyl_derivative[1]};
+      |            ^~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1084:12: warning: unused variable ‘fvzprime’ [-Wunused-variable]
+ 1084 |     double fvzprime{one_cyl_derivative[2]};
+      |            ^~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1086:12: warning: unused variable ‘drhoprime_fvrhoprime’ [-Wunused-variable]
+ 1086 |     double drhoprime_fvrhoprime{two_cyl_derivatives[0]};
+      |            ^~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1087:12: warning: unused variable ‘drhoprime_fvvarphiprime’ [-Wunused-variable]
+ 1087 |     double drhoprime_fvvarphiprime{two_cyl_derivatives[1]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1088:12: warning: unused variable ‘drhoprime_fvzprime’ [-Wunused-variable]
+ 1088 |     double drhoprime_fvzprime{two_cyl_derivatives[2]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1089:12: warning: unused variable ‘dvarphiprime_fvrhoprime’ [-Wunused-variable]
+ 1089 |     double dvarphiprime_fvrhoprime{two_cyl_derivatives[3]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1090:12: warning: unused variable ‘dvarphiprime_fvvarphiprime’ [-Wunused-variable]
+ 1090 |     double dvarphiprime_fvvarphiprime{two_cyl_derivatives[4]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1091:12: warning: unused variable ‘dvarphiprime_fvzprime’ [-Wunused-variable]
+ 1091 |     double dvarphiprime_fvzprime{two_cyl_derivatives[5]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1094:12: warning: unused variable ‘dzprime_fvzprime’ [-Wunused-variable]
+ 1094 |     double dzprime_fvzprime{two_cyl_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_cyl_jacobian_xvz(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:1109:12: warning: unused variable ‘z_wrt_host’ [-Wunused-variable]
+ 1109 |     double z_wrt_host{y[2] - host_frame.get_frame_position()[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1112:12: warning: unused variable ‘fvrhoprime’ [-Wunused-variable]
+ 1112 |     double fvrhoprime{one_cyl_derivative[0]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1113:12: warning: unused variable ‘fvvarphiprime’ [-Wunused-variable]
+ 1113 |     double fvvarphiprime{one_cyl_derivative[1]};
+      |            ^~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1114:12: warning: unused variable ‘fvzprime’ [-Wunused-variable]
+ 1114 |     double fvzprime{one_cyl_derivative[2]};
+      |            ^~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1116:12: warning: unused variable ‘drhoprime_fvrhoprime’ [-Wunused-variable]
+ 1116 |     double drhoprime_fvrhoprime{two_cyl_derivatives[0]};
+      |            ^~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1117:12: warning: unused variable ‘drhoprime_fvvarphiprime’ [-Wunused-variable]
+ 1117 |     double drhoprime_fvvarphiprime{two_cyl_derivatives[1]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1119:12: warning: unused variable ‘dvarphiprime_fvrhoprime’ [-Wunused-variable]
+ 1119 |     double dvarphiprime_fvrhoprime{two_cyl_derivatives[3]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1120:12: warning: unused variable ‘dvarphiprime_fvvarphiprime’ [-Wunused-variable]
+ 1120 |     double dvarphiprime_fvvarphiprime{two_cyl_derivatives[4]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1122:12: warning: unused variable ‘dzprime_fvrhoprime’ [-Wunused-variable]
+ 1122 |     double dzprime_fvrhoprime{two_cyl_derivatives[6]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1123:12: warning: unused variable ‘dzprime_fvvarphiprime’ [-Wunused-variable]
+ 1123 |     double dzprime_fvvarphiprime{two_cyl_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1124:12: warning: unused variable ‘dzprime_fvzprime’ [-Wunused-variable]
+ 1124 |     double dzprime_fvzprime{two_cyl_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_cyl_jacobian_yvz(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:1139:12: warning: unused variable ‘z_wrt_host’ [-Wunused-variable]
+ 1139 |     double z_wrt_host{y[2] - host_frame.get_frame_position()[2]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1142:12: warning: unused variable ‘fvrhoprime’ [-Wunused-variable]
+ 1142 |     double fvrhoprime{one_cyl_derivative[0]};
+      |            ^~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1143:12: warning: unused variable ‘fvvarphiprime’ [-Wunused-variable]
+ 1143 |     double fvvarphiprime{one_cyl_derivative[1]};
+      |            ^~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1144:12: warning: unused variable ‘fvzprime’ [-Wunused-variable]
+ 1144 |     double fvzprime{one_cyl_derivative[2]};
+      |            ^~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1146:12: warning: unused variable ‘drhoprime_fvrhoprime’ [-Wunused-variable]
+ 1146 |     double drhoprime_fvrhoprime{two_cyl_derivatives[0]};
+      |            ^~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1147:12: warning: unused variable ‘drhoprime_fvvarphiprime’ [-Wunused-variable]
+ 1147 |     double drhoprime_fvvarphiprime{two_cyl_derivatives[1]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1149:12: warning: unused variable ‘dvarphiprime_fvrhoprime’ [-Wunused-variable]
+ 1149 |     double dvarphiprime_fvrhoprime{two_cyl_derivatives[3]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1150:12: warning: unused variable ‘dvarphiprime_fvvarphiprime’ [-Wunused-variable]
+ 1150 |     double dvarphiprime_fvvarphiprime{two_cyl_derivatives[4]};
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1152:12: warning: unused variable ‘dzprime_fvrhoprime’ [-Wunused-variable]
+ 1152 |     double dzprime_fvrhoprime{two_cyl_derivatives[6]};
+      |            ^~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1153:12: warning: unused variable ‘dzprime_fvvarphiprime’ [-Wunused-variable]
+ 1153 |     double dzprime_fvvarphiprime{two_cyl_derivatives[7]};
+      |            ^~~~~~~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp:1154:12: warning: unused variable ‘dzprime_fvzprime’ [-Wunused-variable]
+ 1154 |     double dzprime_fvzprime{two_cyl_derivatives[8]};
+      |            ^~~~~~~~~~~~~~~~
+potential/host_potential/static_analytic_potential/host_potential.cpp: In member function ‘double HostPotential::get_cyl_jacobian_zvz(const double*, std::array<double, 3>, std::array<double, 9>)’:
+potential/host_potential/static_analytic_potential/host_potential.cpp:1159:58: warning: unused parameter ‘y’ [-Wunused-parameter]
+ 1159 | double HostPotential::get_cyl_jacobian_zvz(const double *y, std::array<double, 3> one_cyl_derivative, std::array<double, 9> two_cyl_derivatives)
+      |                                            ~~~~~~~~~~~~~~^
+potential/host_potential/static_analytic_potential/host_potential.cpp:1159:83: warning: unused parameter ‘one_cyl_derivative’ [-Wunused-parameter]
+ 1159 | double HostPotential::get_cyl_jacobian_zvz(const double *y, std::array<double, 3> one_cyl_derivative, std::array<double, 9> two_cyl_derivatives)
+      |                                                             ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+integrator/integrator.cpp: In member function ‘void Integrator::integrate_scf_particle_set_one_integration_dt(std::vector<Particle>*, double, int, bool)’:
+integrator/integrator.cpp:163:20: warning: unused variable ‘x_wrt_scf’ [-Wunused-variable]
+  163 |             double x_wrt_scf, y_wrt_scf, z_wrt_scf;
+      |                    ^~~~~~~~~
+integrator/integrator.cpp:163:31: warning: unused variable ‘y_wrt_scf’ [-Wunused-variable]
+  163 |             double x_wrt_scf, y_wrt_scf, z_wrt_scf;
+      |                               ^~~~~~~~~
+integrator/integrator.cpp:163:42: warning: unused variable ‘z_wrt_scf’ [-Wunused-variable]
+  163 |             double x_wrt_scf, y_wrt_scf, z_wrt_scf;
+      |                                          ^~~~~~~~~
+In file included from system/system.h:16,
+                 from system/system.cpp:25:
+system/../relaxation/relaxation.h: In constructor ‘RelaxationUtils::RelaxationUtils(int, Potential&, int, double, double)’:
+system/../relaxation/relaxation.h:27:9: warning: ‘RelaxationUtils::pairing_to_use’ will be initialized after [-Wreorder]
+   27 |     int pairing_to_use;
+      |         ^~~~~~~~~~~~~~
+system/../relaxation/relaxation.h:26:12: warning:   ‘double RelaxationUtils::COULOMBGAMMA’ [-Wreorder]
+   26 |     double COULOMBGAMMA;
+      |            ^~~~~~~~~~~~
+system/../relaxation/relaxation.h:33:5: warning:   when initialized here [-Wreorder]
+   33 |     RelaxationUtils(int n_particles_,
+      |     ^~~~~~~~~~~~~~~
+system/../relaxation/relaxation.h:26:12: warning: ‘RelaxationUtils::COULOMBGAMMA’ will be initialized after [-Wreorder]
+   26 |     double COULOMBGAMMA;
+      |            ^~~~~~~~~~~~
+system/../relaxation/relaxation.h:25:12: warning:   ‘double RelaxationUtils::BETASEMAX’ [-Wreorder]
+   25 |     double BETASEMAX;
+      |            ^~~~~~~~~
+system/../relaxation/relaxation.h:33:5: warning:   when initialized here [-Wreorder]
+   33 |     RelaxationUtils(int n_particles_,
+      |     ^~~~~~~~~~~~~~~
+system/system.cpp: In member function ‘void System::write_snapshot_csv(const string&, Potential*)’:
+system/system.cpp:46:12: warning: unused variable ‘Lz’ [-Wunused-variable]
+   46 |     double Lz, Lmag;
+      |            ^~
+system/system.cpp:46:16: warning: unused variable ‘Lmag’ [-Wunused-variable]
+   46 |     double Lz, Lmag;
+      |                ^~~~
+system/system.cpp:47:12: warning: unused variable ‘rho_scf’ [-Wunused-variable]
+   47 |     double rho_scf, rho_local;
+      |            ^~~~~~~
+system/system.cpp:47:21: warning: unused variable ‘rho_local’ [-Wunused-variable]
+   47 |     double rho_scf, rho_local;
+      |                     ^~~~~~~~~
+system/system.cpp: In member function ‘void System::write_tidal_tensor_information_csv(const string&, Potential*, double, bool)’:
+system/system.cpp:307:38: warning: narrowing conversion of ‘eval_pairs.std::vector<std::pair<double, long unsigned int> >::front().std::pair<double, long unsigned int>::second’ from ‘long unsigned int’ to ‘int’ [-Wnarrowing]
+  307 |     int max_index{eval_pairs.front().second};
+      |                   ~~~~~~~~~~~~~~~~~~~^~~~~~
+system/system.cpp: In member function ‘void System::initial_condition_generator(std::vector<std::vector<double> >&, int, std::array<double, 6>)’:
+system/system.cpp:499:21: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<Particle>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  499 |     if (n_particles != this->particle_set.size())
+      |         ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+system/system.cpp:508:17: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<std::vector<double> >::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  508 |         if (idx >= input_data.size())
+      |             ~~~~^~~~~~~~~~~~~~~~~~~~
+system/system.cpp: In member function ‘std::array<double, 3> System::get_angular_momentum_vector(Potential*, ReferenceFrame*)’:
+system/system.cpp:664:12: warning: ISO C++ forbids variable length array ‘sum_x’ [-Wvla]
+  664 |     double sum_x[num_threads];
+      |            ^~~~~
+system/system.cpp:665:12: warning: ISO C++ forbids variable length array ‘sum_y’ [-Wvla]
+  665 |     double sum_y[num_threads];
+      |            ^~~~~
+system/system.cpp:666:12: warning: ISO C++ forbids variable length array ‘sum_z’ [-Wvla]
+  666 |     double sum_z[num_threads];
+      |            ^~~~~
+system/system.cpp:652:70: warning: unused parameter ‘potential’ [-Wunused-parameter]
+  652 | std::array<double, 3> System::get_angular_momentum_vector(Potential *potential,
+      |                                                           ~~~~~~~~~~~^~~~~~~~~
+system/system.cpp: In member function ‘ReferenceFrame System::get_casertano_hut_density_center()’:
+system/system.cpp:932:12: warning: ISO C++ forbids variable length array ‘sum_x’ [-Wvla]
+  932 |     double sum_x[num_threads];
+      |            ^~~~~
+system/system.cpp:933:12: warning: ISO C++ forbids variable length array ‘sum_y’ [-Wvla]
+  933 |     double sum_y[num_threads];
+      |            ^~~~~
+system/system.cpp:934:12: warning: ISO C++ forbids variable length array ‘sum_z’ [-Wvla]
+  934 |     double sum_z[num_threads];
+      |            ^~~~~
+system/system.cpp:935:12: warning: ISO C++ forbids variable length array ‘sum_vx’ [-Wvla]
+  935 |     double sum_vx[num_threads];
+      |            ^~~~~~
+system/system.cpp:936:12: warning: ISO C++ forbids variable length array ‘sum_vy’ [-Wvla]
+  936 |     double sum_vy[num_threads];
+      |            ^~~~~~
+system/system.cpp:937:12: warning: ISO C++ forbids variable length array ‘sum_vz’ [-Wvla]
+  937 |     double sum_vz[num_threads];
+      |            ^~~~~~
+system/system.cpp:939:12: warning: ISO C++ forbids variable length array ‘sum_den’ [-Wvla]
+  939 |     double sum_den[num_threads];
+      |            ^~~~~~~
+system/system.cpp: In member function ‘std::array<double, 6> System::get_barycenter_phase_space_coord(Potential*)’:
+system/system.cpp:1400:75: warning: unused parameter ‘potential’ [-Wunused-parameter]
+ 1400 | std::array<double, 6> System::get_barycenter_phase_space_coord(Potential *potential)
+      |                                                                ~~~~~~~~~~~^~~~~~~~~
+system/system.cpp: In member function ‘bool System::identify_scf_and_bound_states(Potential*, cxxopts::ParseResult, bool)’:
+system/system.cpp:1630:49: warning: unused parameter ‘first_timestep’ [-Wunused-parameter]
+ 1630 |                                            bool first_timestep)
+      |                                            ~~~~~^~~~~~~~~~~~~~
+system/system.cpp: In member function ‘bool System::too_little_mass_in_cluster(Potential*)’:
+system/system.cpp:1657:52: warning: unused parameter ‘potential’ [-Wunused-parameter]
+ 1657 | bool System::too_little_mass_in_cluster(Potential *potential)
+      |                                         ~~~~~~~~~~~^~~~~~~~~
+system/system.cpp: In member function ‘double System::stodolkiewicz_particle_set_vel_update(Potential*)’:
+system/system.cpp:1917:12: warning: ISO C++ forbids variable length array ‘sum’ [-Wvla]
+ 1917 |     double sum[num_threads];
+      |            ^~~
+In file included from main/../system/system.h:16,
+                 from main/main.cpp:22:
+main/../system/../relaxation/relaxation.h: In constructor ‘RelaxationUtils::RelaxationUtils(int, Potential&, int, double, double)’:
+main/../system/../relaxation/relaxation.h:27:9: warning: ‘RelaxationUtils::pairing_to_use’ will be initialized after [-Wreorder]
+   27 |     int pairing_to_use;
+      |         ^~~~~~~~~~~~~~
+main/../system/../relaxation/relaxation.h:26:12: warning:   ‘double RelaxationUtils::COULOMBGAMMA’ [-Wreorder]
+   26 |     double COULOMBGAMMA;
+      |            ^~~~~~~~~~~~
+main/../system/../relaxation/relaxation.h:33:5: warning:   when initialized here [-Wreorder]
+   33 |     RelaxationUtils(int n_particles_,
+      |     ^~~~~~~~~~~~~~~
+main/../system/../relaxation/relaxation.h:26:12: warning: ‘RelaxationUtils::COULOMBGAMMA’ will be initialized after [-Wreorder]
+   26 |     double COULOMBGAMMA;
+      |            ^~~~~~~~~~~~
+main/../system/../relaxation/relaxation.h:25:12: warning:   ‘double RelaxationUtils::BETASEMAX’ [-Wreorder]
+   25 |     double BETASEMAX;
+      |            ^~~~~~~~~
+main/../system/../relaxation/relaxation.h:33:5: warning:   when initialized here [-Wreorder]
+   33 |     RelaxationUtils(int n_particles_,
+      |     ^~~~~~~~~~~~~~~
+main/main.cpp: In function ‘double get_rvir_from_rhm_in_pc(double, std::vector<std::vector<double> >&)’:
+main/main.cpp:113:27: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<std::vector<double> >::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  113 |     for (int idx = 0; idx < input_data.size(); ++idx)
+      |                       ~~~~^~~~~~~~~~~~~~~~~~~
+main/main.cpp:161:23: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<double>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  161 |     for (int i = 1; i < enclosed_mass.size(); ++i)
+      |                     ~~^~~~~~~~~~~~~~~~~~~~~~
+system/system.cpp: In member function ‘void System::verbose_output_wrapper(Potential*, double, double, double, double, bool, bool)’:
+system/system.cpp:2418:44: warning: unused parameter ‘t_end’ [-Wunused-parameter]
+ 2418 |                                     double t_end,
+      |                                     ~~~~~~~^~~~~
+system/system.cpp: In member function ‘void System::integrate_single_particle(Potential*, Integrator*, cxxopts::ParseResult)’:
+system/system.cpp:2558:10: warning: unused variable ‘get_snapshots’ [-Wunused-variable]
+ 2558 |     bool get_snapshots{input_params["get_snapshots"].as<bool>()};
+      |          ^~~~~~~~~~~~~
+system/system.cpp:2559:10: warning: unused variable ‘verbose_output’ [-Wunused-variable]
+ 2559 |     bool verbose_output{input_params["verbose_output"].as<bool>()};
+      |          ^~~~~~~~~~~~~~
+system/system.cpp: In member function ‘void System::integrate_n_particles(Potential*, Integrator*, RelaxationUtils*, cxxopts::ParseResult)’:
+system/system.cpp:2646:44: warning: narrowing conversion of ‘(&((System*)this)->System::particle_set)->std::vector<Particle>::size()’ from ‘std::vector<Particle>::size_type’ {aka ‘long unsigned int’} to ‘int’ [-Wnarrowing]
+ 2646 |     int n_particles{this->particle_set.size()};
+      |                     ~~~~~~~~~~~~~~~~~~~~~~~^~
+system/system.cpp:2646:9: warning: unused variable ‘n_particles’ [-Wunused-variable]
+ 2646 |     int n_particles{this->particle_set.size()};
+      |         ^~~~~~~~~~~
+system/system.cpp: In member function ‘void System::write_snapshot_csv(const string&, Potential*)’:
+system/system.cpp:132:24: warning: ‘U_wrt_host’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  132 |             U_wrt_host *= unit_handler.to_MSun() * std::pow(unit_handler.to_km_per_s(), 2.0);
+      |             ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+system/system.cpp: In member function ‘void System::integrate_n_particles(Potential*, Integrator*, RelaxationUtils*, cxxopts::ParseResult)’:
+system/system.cpp:2659:12: warning: ‘integration_dt_eta’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+ 2659 |     double integration_dt_eta;
+      |            ^~~~~~~~~~~~~~~~~~
+In file included from main/../integrator/integrator.h:4,
+                 from main/main.cpp:17:
+In copy constructor ‘Particle::Particle(const Particle&)’,
+    inlined from ‘void std::_Construct(_Tp*, _Args&& ...) [with _Tp = Particle; _Args = {const Particle&}]’ at /nas/longleaf/rhel8/apps/gcc/11.2.0/include/c++/11.2.0/bits/stl_construct.h:109:7,
+    inlined from ‘static _ForwardIterator std::__uninitialized_fill_n<_TrivialValueType>::__uninit_fill_n(_ForwardIterator, _Size, const _Tp&) [with _ForwardIterator = Particle*; _Size = long unsigned int; _Tp = Particle; bool _TrivialValueType = false]’ at /nas/longleaf/rhel8/apps/gcc/11.2.0/include/c++/11.2.0/bits/stl_uninitialized.h:237:18,
+    inlined from ‘_ForwardIterator std::uninitialized_fill_n(_ForwardIterator, _Size, const _Tp&) [with _ForwardIterator = Particle*; _Size = long unsigned int; _Tp = Particle]’ at /nas/longleaf/rhel8/apps/gcc/11.2.0/include/c++/11.2.0/bits/stl_uninitialized.h:297:17,
+    inlined from ‘_ForwardIterator std::__uninitialized_fill_n_a(_ForwardIterator, _Size, const _Tp&, std::allocator<_Tp2>&) [with _ForwardIterator = Particle*; _Size = long unsigned int; _Tp = Particle; _Tp2 = Particle]’ at /nas/longleaf/rhel8/apps/gcc/11.2.0/include/c++/11.2.0/bits/stl_uninitialized.h:410:39,
+    inlined from ‘void std::vector<_Tp, _Alloc>::_M_fill_initialize(std::vector<_Tp, _Alloc>::size_type, const value_type&) [with _Tp = Particle; _Alloc = std::allocator<Particle>]’ at /nas/longleaf/rhel8/apps/gcc/11.2.0/include/c++/11.2.0/bits/stl_vector.h:1596:33,
+    inlined from ‘std::vector<_Tp, _Alloc>::vector(std::vector<_Tp, _Alloc>::size_type, const value_type&, const allocator_type&) [with _Tp = Particle; _Alloc = std::allocator<Particle>]’ at /nas/longleaf/rhel8/apps/gcc/11.2.0/include/c++/11.2.0/bits/stl_vector.h:525:27,
+    inlined from ‘void main_fn(cxxopts::ParseResult)’ at main/main.cpp:259:63:
+main/../integrator/../particle/particle.h:15:7: warning: ‘<unnamed>.Particle::paired_up’ may be used uninitialized [-Wmaybe-uninitialized]
+   15 | class Particle
+      |       ^~~~~~~~
+main/main.cpp: In function ‘void main_fn(cxxopts::ParseResult)’:
+main/main.cpp:259:62: note: ‘<anonymous>’ declared here
+  259 |                                                 particle_time));
+      |                                                              ^
+In file included from main/main.cpp:15:
+In function ‘char* strncpy0(char*, const char*, size_t)’,
+    inlined from ‘int ini_parse_stream(ini_reader, void*, ini_handler, void*)’ at main/../include/INIReader.h:257:25,
+    inlined from ‘int ini_parse_file(FILE*, ini_handler, void*)’ at main/../include/INIReader.h:283:28,
+    inlined from ‘int ini_parse(const char*, ini_handler, void*)’ at main/../include/INIReader.h:295:27,
+    inlined from ‘INIReader::INIReader(const string&)’ at main/../include/INIReader.h:377:23,
+    inlined from ‘int main(int, char**)’ at main/main.cpp:351:34:
+main/../include/INIReader.h:163:12: warning: ‘char* strncpy(char*, const char*, size_t)’ output may be truncated copying 49 bytes from a string of length 199 [-Wstringop-truncation]
+  163 |     strncpy(dest, src, size);
+      |     ~~~~~~~^~~~~~~~~~~~~~~~~

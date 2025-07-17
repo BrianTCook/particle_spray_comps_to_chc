@@ -1,0 +1,1499 @@
+g++ -std=c++17 -Wall -Wextra -pedantic -O3 -fopenmp -I/usr/local/include   -c -o main/main.o main/main.cpp
+g++ -std=c++17 -Wall -Wextra -pedantic -O3 -fopenmp -I/usr/local/include   -c -o integrator/integrator.o integrator/integrator.cpp
+g++ -std=c++17 -Wall -Wextra -pedantic -O3 -fopenmp -I/usr/local/include   -c -o system/system.o system/system.cpp
+g++ -std=c++17 -Wall -Wextra -pedantic -O3 -fopenmp -I/usr/local/include   -c -o potential/host_potential/static_analytic_potential/host_potential.o potential/host_potential/static_analytic_potential/host_potential.cpp
+g++ -std=c++17 -Wall -Wextra -pedantic -O3 -fopenmp -I/usr/local/include -o krios_executable main/main.o integrator/integrator.o particle/particle.o system/system.o units/units.o reference_frame/reference_frame.o nearest_neighbors/box/box.o nearest_neighbors/hilbert/hilbert.o nearest_neighbors/octree/octree.o relaxation/relaxation.o relaxation/kdtree.o potential/potential.o potential/cluster_potential/cluster_potential.o potential/host_potential/static_analytic_potential/host_potential.o potential/cluster_potential/zhao_library/Ylm_jump_table.o potential/cluster_potential/zhao_library/D_Ylm_jump_table.o potential/cluster_potential/zhao_library/D2_Ylm_jump_table.o potential/cluster_potential/zhao_library/Cnw_jump_table.o potential/cluster_potential/zhao_library/D_Cnw_jump_table.o potential/cluster_potential/zhao_library/D2_Cnw_jump_table.o -L/usr/local/lib -lgsl -lgslcblas -lm -fopenmp
+===========================================================
+KRIOS run, Longleaf Job ID: 8565710
+
+nmax: 10, lmax: 5
+sort_and_filter_scf_modes: 1
+
+ics_filename: /proj/rodriguezlab/users/brian/KRIOS/data/krios_king_ics_n_10000.csv
+
+include_relaxation: 1
+pairing_to_use: 0
+target_nb_neigh: 30
+
+io_in_physical_units: 1
+m_sys_cluster_msun: 100000 MSun
+r_half_mass_pc: 20 pc
+
+t_end: 5000
+dt_max: none
+n_samples_per_t_dyn: 100
+use Stodolkiewicz: 0
+parsing_to_use: 1
+rt_multiple: 5
+
+scf_center_method_to_use: 2
+
+include_host_potential: 1
+x_gc_init: 15.7838 kpc
+y_gc_init: 7.30572 kpc
+z_gc_init: 9.68076 kpc
+vx_gc_init: -139.447 km/s
+vy_gc_init: 192.887 km/s
+vz_gc_init: -148.992 km/s
+
+integration_dt_eta: 0.0025
+
+get_snapshots: 1, verbose_output: 1
+n_integrations_per_saved_snapshot: 100
+n_integrations_per_complete_scf_refresh: 20
+===========================================================
+
+NOTE: these outputs are in Henon units; consult the snapshots for information in physical units
+# of threads: 128
+# of procs: 128
+
+1 mass HU = 100000 MSun
+1 length HU = 24.5621 pc
+1 time HU = 5.73938 Myr
+
+=====================================================
+system_time: 0 Myr, wall clock time 2025-07-16 16:00:43 UTC
+system_dt: 139.973 Myr
+integration_dt: 139.973 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999585
+
+Rc: 0.307611
+fraction of particles in core: 0.098
+fraction of particles outside tidal radius = 118.801 pc: 0
+r_0.01: 0.132551, r_0.1: 0.31104, r_0.2: 0.437468, r_0.5: 0.813758, r_0.9: 1.88819
+
+cluster energy: -0.24969
+cluster virial ratio: 1.00069
+cluster L: 0.00581516, Lz: -0.00446516
+
+alpha: 0.51376, b: 0.622626
+fraction of particles included in setting up the SCF: 1
+fraction of particles bound to the SCF: 1
+=====================================================
+system_time: 139.973 Myr, wall clock time 2025-07-16 16:11:49 UTC
+system_dt: 137.277 Myr
+integration_dt: 137.277 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999706
+
+Rc: 0.307441
+fraction of particles in core: 0.0989
+fraction of particles outside tidal radius = 151.468 pc: 0.0003
+r_0.01: 0.125137, r_0.1: 0.309518, r_0.2: 0.432675, r_0.5: 0.810525, r_0.9: 1.92449
+
+cluster energy: -0.248527
+cluster virial ratio: 0.998347
+cluster L: 0.0018064, Lz: -9.01584e-05
+
+alpha: 0.523185, b: 0.618504
+fraction of particles included in setting up the SCF: 1
+fraction of particles bound to the SCF: 0.9999
+=====================================================
+system_time: 277.25 Myr, wall clock time 2025-07-16 16:20:59 UTC
+system_dt: 152.606 Myr
+integration_dt: 152.606 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999494
+
+Rc: 0.296149
+fraction of particles in core: 0.0924
+fraction of particles outside tidal radius = 210.099 pc: 0.0002
+r_0.01: 0.123021, r_0.1: 0.308721, r_0.2: 0.436126, r_0.5: 0.812525, r_0.9: 1.93739
+
+cluster energy: -0.25058
+cluster virial ratio: 0.992553
+cluster L: 0.00287479, Lz: 0.00127435
+
+alpha: 0.525981, b: 0.616852
+fraction of particles included in setting up the SCF: 1
+fraction of particles bound to the SCF: 0.9998
+=====================================================
+system_time: 429.856 Myr, wall clock time 2025-07-16 16:31:29 UTC
+system_dt: 108.958 Myr
+integration_dt: 108.958 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999755
+
+Rc: 0.286889
+fraction of particles in core: 0.0919
+fraction of particles outside tidal radius = 221.34 pc: 0.0005
+r_0.01: 0.124374, r_0.1: 0.297954, r_0.2: 0.427205, r_0.5: 0.806582, r_0.9: 1.94667
+
+cluster energy: -0.250714
+cluster virial ratio: 0.995438
+cluster L: 0.00280195, Lz: 0.00193586
+
+alpha: 0.540796, b: 0.606061
+fraction of particles included in setting up the SCF: 1
+fraction of particles bound to the SCF: 0.9998
+=====================================================
+system_time: 538.814 Myr, wall clock time 2025-07-16 16:38:58 UTC
+system_dt: 112.489 Myr
+integration_dt: 112.489 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999711
+
+Rc: 0.280566
+fraction of particles in core: 0.0881
+fraction of particles outside tidal radius = 196.161 pc: 0.0008
+r_0.01: 0.116905, r_0.1: 0.29855, r_0.2: 0.421564, r_0.5: 0.802865, r_0.9: 1.93746
+
+cluster energy: -0.252115
+cluster virial ratio: 0.996257
+cluster L: 0.00328725, Lz: 0.00184415
+
+alpha: 0.541546, b: 0.601754
+fraction of particles included in setting up the SCF: 0.9999
+fraction of particles bound to the SCF: 0.9996
+=====================================================
+system_time: 651.303 Myr, wall clock time 2025-07-16 16:46:51 UTC
+system_dt: 94.4249 Myr
+integration_dt: 94.4249 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999612
+
+Rc: 0.276222
+fraction of particles in core: 0.0876
+fraction of particles outside tidal radius = 141.546 pc: 0.0016
+r_0.01: 0.122195, r_0.1: 0.293298, r_0.2: 0.41915, r_0.5: 0.802664, r_0.9: 1.9674
+
+cluster energy: -0.251509
+cluster virial ratio: 0.998996
+cluster L: 0.00391201, Lz: 0.0027536
+
+alpha: 0.546102, b: 0.597425
+fraction of particles included in setting up the SCF: 0.9997
+fraction of particles bound to the SCF: 0.9991
+=====================================================
+system_time: 745.728 Myr, wall clock time 2025-07-16 16:54:11 UTC
+system_dt: 69.0881 Myr
+integration_dt: 69.0881 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999449
+
+Rc: 0.264336
+fraction of particles in core: 0.0779
+fraction of particles outside tidal radius = 104.983 pc: 0.006
+r_0.01: 0.112795, r_0.1: 0.295228, r_0.2: 0.419351, r_0.5: 0.809268, r_0.9: 1.98661
+
+cluster energy: -0.252643
+cluster virial ratio: 0.987978
+cluster L: 0.00711433, Lz: 0.00627331
+
+alpha: 0.550781, b: 0.598795
+fraction of particles included in setting up the SCF: 0.9993
+fraction of particles bound to the SCF: 0.9984
+=====================================================
+system_time: 814.816 Myr, wall clock time 2025-07-16 17:00:01 UTC
+system_dt: 79.9664 Myr
+integration_dt: 79.9664 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999409
+
+Rc: 0.26864
+fraction of particles in core: 0.081
+fraction of particles outside tidal radius = 132.317 pc: 0.0052
+r_0.01: 0.111032, r_0.1: 0.289395, r_0.2: 0.415094, r_0.5: 0.800731, r_0.9: 1.98921
+
+cluster energy: -0.251513
+cluster virial ratio: 0.997379
+cluster L: 0.0105198, Lz: 0.00906043
+
+alpha: 0.552443, b: 0.589528
+fraction of particles included in setting up the SCF: 0.9995
+fraction of particles bound to the SCF: 0.997
+=====================================================
+system_time: 894.782 Myr, wall clock time 2025-07-16 17:05:41 UTC
+system_dt: 102.439 Myr
+integration_dt: 102.439 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999636
+
+Rc: 0.26184
+fraction of particles in core: 0.0837
+fraction of particles outside tidal radius = 173.902 pc: 0.0051
+r_0.01: 0.109906, r_0.1: 0.284195, r_0.2: 0.411667, r_0.5: 0.797519, r_0.9: 2.00987
+
+cluster energy: -0.251713
+cluster virial ratio: 0.998478
+cluster L: 0.0109825, Lz: 0.0102205
+
+alpha: 0.56287, b: 0.58259
+fraction of particles included in setting up the SCF: 0.9996
+fraction of particles bound to the SCF: 0.9956
+=====================================================
+system_time: 997.221 Myr, wall clock time 2025-07-16 17:12:55 UTC
+system_dt: 78.5406 Myr
+integration_dt: 78.5406 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999643
+
+Rc: 0.259577
+fraction of particles in core: 0.078
+fraction of particles outside tidal radius = 205.103 pc: 0.0056
+r_0.01: 0.107797, r_0.1: 0.28827, r_0.2: 0.404756, r_0.5: 0.796632, r_0.9: 2.02788
+
+cluster energy: -0.253493
+cluster virial ratio: 0.993299
+cluster L: 0.0112407, Lz: 0.0104391
+
+alpha: 0.563284, b: 0.579807
+fraction of particles included in setting up the SCF: 0.9998
+fraction of particles bound to the SCF: 0.9953
+=====================================================
+system_time: 1075.76 Myr, wall clock time 2025-07-16 17:18:00 UTC
+system_dt: 75.6325 Myr
+integration_dt: 75.6325 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999566
+
+Rc: 0.255419
+fraction of particles in core: 0.0804
+fraction of particles outside tidal radius = 212.595 pc: 0.0058
+r_0.01: 0.11371, r_0.1: 0.282895, r_0.2: 0.407981, r_0.5: 0.801075, r_0.9: 2.03029
+
+cluster energy: -0.253686
+cluster virial ratio: 0.991647
+cluster L: 0.0102278, Lz: 0.00986046
+
+alpha: 0.570038, b: 0.577997
+fraction of particles included in setting up the SCF: 0.9992
+fraction of particles bound to the SCF: 0.9951
+=====================================================
+system_time: 1151.39 Myr, wall clock time 2025-07-16 17:23:13 UTC
+system_dt: 92.6049 Myr
+integration_dt: 92.6049 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999438
+
+Rc: 0.245329
+fraction of particles in core: 0.0778
+fraction of particles outside tidal radius = 208.593 pc: 0.0064
+r_0.01: 0.11198, r_0.1: 0.276617, r_0.2: 0.39437, r_0.5: 0.781098, r_0.9: 2.05533
+
+cluster energy: -0.253915
+cluster virial ratio: 0.999497
+cluster L: 0.0099083, Lz: 0.00952665
+
+alpha: 0.578292, b: 0.563231
+fraction of particles included in setting up the SCF: 0.9979
+fraction of particles bound to the SCF: 0.995
+=====================================================
+system_time: 1244 Myr, wall clock time 2025-07-16 17:30:10 UTC
+system_dt: 122.716 Myr
+integration_dt: 122.716 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999371
+
+Rc: 0.244969
+fraction of particles in core: 0.0804
+fraction of particles outside tidal radius = 190.13 pc: 0.007
+r_0.01: 0.110927, r_0.1: 0.272038, r_0.2: 0.392596, r_0.5: 0.776902, r_0.9: 2.04541
+
+cluster energy: -0.254181
+cluster virial ratio: 1.00701
+cluster L: 0.0101534, Lz: 0.00951578
+
+alpha: 0.573474, b: 0.558244
+fraction of particles included in setting up the SCF: 0.9956
+fraction of particles bound to the SCF: 0.9944
+=====================================================
+system_time: 1366.72 Myr, wall clock time 2025-07-16 17:39:36 UTC
+system_dt: 81.0554 Myr
+integration_dt: 81.0554 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999459
+
+Rc: 0.239526
+fraction of particles in core: 0.0756
+fraction of particles outside tidal radius = 136.251 pc: 0.0097
+r_0.01: 0.103379, r_0.1: 0.274452, r_0.2: 0.394051, r_0.5: 0.779694, r_0.9: 2.0677
+
+cluster energy: -0.255203
+cluster virial ratio: 0.999584
+cluster L: 0.0103364, Lz: 0.00927728
+
+alpha: 0.577817, b: 0.55796
+fraction of particles included in setting up the SCF: 0.9947
+fraction of particles bound to the SCF: 0.9931
+=====================================================
+system_time: 1447.77 Myr, wall clock time 2025-07-16 17:46:24 UTC
+system_dt: 104.137 Myr
+integration_dt: 104.137 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999551
+
+Rc: 0.243167
+fraction of particles in core: 0.083
+fraction of particles outside tidal radius = 103.714 pc: 0.0173
+r_0.01: 0.106752, r_0.1: 0.268596, r_0.2: 0.387165, r_0.5: 0.786261, r_0.9: 2.08808
+
+cluster energy: -0.254045
+cluster virial ratio: 0.999341
+cluster L: 0.0125118, Lz: 0.0100605
+
+alpha: 0.588024, b: 0.554472
+fraction of particles included in setting up the SCF: 0.9939
+fraction of particles bound to the SCF: 0.9908
+=====================================================
+system_time: 1551.91 Myr, wall clock time 2025-07-16 17:55:04 UTC
+system_dt: 123.356 Myr
+integration_dt: 123.356 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999612
+
+Rc: 0.244776
+fraction of particles in core: 0.0818
+fraction of particles outside tidal radius = 155.883 pc: 0.0139
+r_0.01: 0.106563, r_0.1: 0.270854, r_0.2: 0.390478, r_0.5: 0.780699, r_0.9: 2.126
+
+cluster energy: -0.254437
+cluster virial ratio: 0.992543
+cluster L: 0.0173447, Lz: 0.0134072
+
+alpha: 0.583253, b: 0.555683
+fraction of particles included in setting up the SCF: 0.9942
+fraction of particles bound to the SCF: 0.9887
+=====================================================
+system_time: 1675.26 Myr, wall clock time 2025-07-16 18:04:32 UTC
+system_dt: 115.283 Myr
+integration_dt: 115.283 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999578
+
+Rc: 0.236714
+fraction of particles in core: 0.0767
+fraction of particles outside tidal radius = 193.049 pc: 0.0142
+r_0.01: 0.101523, r_0.1: 0.269285, r_0.2: 0.384596, r_0.5: 0.778254, r_0.9: 2.15319
+
+cluster energy: -0.255842
+cluster virial ratio: 0.992896
+cluster L: 0.0160488, Lz: 0.0111857
+
+alpha: 0.587265, b: 0.548733
+fraction of particles included in setting up the SCF: 0.9947
+fraction of particles bound to the SCF: 0.9872
+=====================================================
+system_time: 1790.55 Myr, wall clock time 2025-07-16 18:12:59 UTC
+system_dt: 90.2519 Myr
+integration_dt: 90.2519 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999494
+
+Rc: 0.235324
+fraction of particles in core: 0.0765
+fraction of particles outside tidal radius = 203.752 pc: 0.0148
+r_0.01: 0.104279, r_0.1: 0.264424, r_0.2: 0.381774, r_0.5: 0.778474, r_0.9: 2.18197
+
+cluster energy: -0.255641
+cluster virial ratio: 0.988263
+cluster L: 0.0141917, Lz: 0.00967852
+
+alpha: 0.592612, b: 0.54612
+fraction of particles included in setting up the SCF: 0.9916
+fraction of particles bound to the SCF: 0.9867
+=====================================================
+system_time: 1880.8 Myr, wall clock time 2025-07-16 18:20:06 UTC
+system_dt: 101.861 Myr
+integration_dt: 101.861 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.99923
+
+Rc: 0.22244
+fraction of particles in core: 0.0686
+fraction of particles outside tidal radius = 193.434 pc: 0.0154
+r_0.01: 0.103723, r_0.1: 0.264513, r_0.2: 0.381126, r_0.5: 0.768379, r_0.9: 2.17511
+
+cluster energy: -0.256047
+cluster virial ratio: 0.990336
+cluster L: 0.0127569, Lz: 0.00949921
+
+alpha: 0.596273, b: 0.540188
+fraction of particles included in setting up the SCF: 0.9887
+fraction of particles bound to the SCF: 0.986
+=====================================================
+system_time: 1982.66 Myr, wall clock time 2025-07-16 18:28:31 UTC
+system_dt: 65.7582 Myr
+integration_dt: 65.7582 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999516
+
+Rc: 0.228688
+fraction of particles in core: 0.0808
+fraction of particles outside tidal radius = 162.38 pc: 0.0168
+r_0.01: 0.0983343, r_0.1: 0.254619, r_0.2: 0.373829, r_0.5: 0.765136, r_0.9: 2.18278
+
+cluster energy: -0.254175
+cluster virial ratio: 1.0096
+cluster L: 0.0119581, Lz: 0.00910984
+
+alpha: 0.602826, b: 0.528657
+fraction of particles included in setting up the SCF: 0.9866
+fraction of particles bound to the SCF: 0.9851
+=====================================================
+system_time: 2048.42 Myr, wall clock time 2025-07-16 18:34:26 UTC
+system_dt: 72.3988 Myr
+integration_dt: 72.3988 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.998959
+
+Rc: 0.229471
+fraction of particles in core: 0.0738
+fraction of particles outside tidal radius = 130.774 pc: 0.0187
+r_0.01: 0.103072, r_0.1: 0.258848, r_0.2: 0.376794, r_0.5: 0.770707, r_0.9: 2.19404
+
+cluster energy: -0.257409
+cluster virial ratio: 0.988457
+cluster L: 0.0125583, Lz: 0.00916225
+
+alpha: 0.598365, b: 0.535291
+fraction of particles included in setting up the SCF: 0.9857
+fraction of particles bound to the SCF: 0.9845
+=====================================================
+system_time: 2120.82 Myr, wall clock time 2025-07-16 18:41:42 UTC
+system_dt: 78.5064 Myr
+integration_dt: 78.5064 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.998987
+
+Rc: 0.210556
+fraction of particles in core: 0.0666
+fraction of particles outside tidal radius = 111.809 pc: 0.0252
+r_0.01: 0.096936, r_0.1: 0.253034, r_0.2: 0.367624, r_0.5: 0.759464, r_0.9: 2.21378
+
+cluster energy: -0.25767
+cluster virial ratio: 0.998991
+cluster L: 0.0171239, Lz: 0.0132523
+
+alpha: 0.609268, b: 0.523241
+fraction of particles included in setting up the SCF: 0.9848
+fraction of particles bound to the SCF: 0.9824
+=====================================================
+system_time: 2199.32 Myr, wall clock time 2025-07-16 18:49:06 UTC
+system_dt: 61.4377 Myr
+integration_dt: 61.4377 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999043
+
+Rc: 0.207027
+fraction of particles in core: 0.0663
+fraction of particles outside tidal radius = 143.671 pc: 0.0235
+r_0.01: 0.0939714, r_0.1: 0.249725, r_0.2: 0.361584, r_0.5: 0.756621, r_0.9: 2.21566
+
+cluster energy: -0.257662
+cluster virial ratio: 1.00585
+cluster L: 0.0202571, Lz: 0.0169639
+
+alpha: 0.613256, b: 0.51309
+fraction of particles included in setting up the SCF: 0.985
+fraction of particles bound to the SCF: 0.9791
+=====================================================
+system_time: 2260.76 Myr, wall clock time 2025-07-16 18:54:24 UTC
+system_dt: 88.5114 Myr
+integration_dt: 88.5114 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999417
+
+Rc: 0.211901
+fraction of particles in core: 0.0704
+fraction of particles outside tidal radius = 171.61 pc: 0.0241
+r_0.01: 0.0967016, r_0.1: 0.249065, r_0.2: 0.363771, r_0.5: 0.756949, r_0.9: 2.26724
+
+cluster energy: -0.258158
+cluster virial ratio: 0.999763
+cluster L: 0.0205957, Lz: 0.0167976
+
+alpha: 0.613147, b: 0.512281
+fraction of particles included in setting up the SCF: 0.9856
+fraction of particles bound to the SCF: 0.978
+=====================================================
+system_time: 2349.27 Myr, wall clock time 2025-07-16 19:01:36 UTC
+system_dt: 55.2996 Myr
+integration_dt: 55.2996 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999444
+
+Rc: 0.207248
+fraction of particles in core: 0.0726
+fraction of particles outside tidal radius = 197.736 pc: 0.0255
+r_0.01: 0.0926308, r_0.1: 0.240717, r_0.2: 0.357515, r_0.5: 0.757075, r_0.9: 2.26381
+
+cluster energy: -0.257522
+cluster virial ratio: 1.00197
+cluster L: 0.0194758, Lz: 0.0152806
+
+alpha: 0.628302, b: 0.505361
+fraction of particles included in setting up the SCF: 0.9868
+fraction of particles bound to the SCF: 0.9767
+=====================================================
+system_time: 2404.57 Myr, wall clock time 2025-07-16 19:05:57 UTC
+system_dt: 73.0701 Myr
+integration_dt: 73.0701 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999546
+
+Rc: 0.206417
+fraction of particles in core: 0.0691
+fraction of particles outside tidal radius = 206.678 pc: 0.0258
+r_0.01: 0.095267, r_0.1: 0.247694, r_0.2: 0.363774, r_0.5: 0.739027, r_0.9: 2.29355
+
+cluster energy: -0.257576
+cluster virial ratio: 1.00624
+cluster L: 0.0179351, Lz: 0.0134705
+
+alpha: 0.607776, b: 0.507992
+fraction of particles included in setting up the SCF: 0.9868
+fraction of particles bound to the SCF: 0.976
+=====================================================
+system_time: 2477.64 Myr, wall clock time 2025-07-16 19:11:47 UTC
+system_dt: 66.0815 Myr
+integration_dt: 66.0815 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999644
+
+Rc: 0.207919
+fraction of particles in core: 0.0685
+fraction of particles outside tidal radius = 209.944 pc: 0.0262
+r_0.01: 0.0956597, r_0.1: 0.245785, r_0.2: 0.361357, r_0.5: 0.759261, r_0.9: 2.31885
+
+cluster energy: -0.260931
+cluster virial ratio: 0.989482
+cluster L: 0.0162638, Lz: 0.0131383
+
+alpha: 0.619497, b: 0.507624
+fraction of particles included in setting up the SCF: 0.9834
+fraction of particles bound to the SCF: 0.9751
+=====================================================
+system_time: 2543.72 Myr, wall clock time 2025-07-16 19:16:55 UTC
+system_dt: 95.5414 Myr
+integration_dt: 95.5414 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999584
+
+Rc: 0.208981
+fraction of particles in core: 0.0718
+fraction of particles outside tidal radius = 204.225 pc: 0.0266
+r_0.01: 0.099678, r_0.1: 0.243381, r_0.2: 0.358549, r_0.5: 0.741198, r_0.9: 2.33747
+
+cluster energy: -0.258592
+cluster virial ratio: 1.00239
+cluster L: 0.0161251, Lz: 0.0131558
+
+alpha: 0.612997, b: 0.50244
+fraction of particles included in setting up the SCF: 0.9794
+fraction of particles bound to the SCF: 0.9747
+=====================================================
+system_time: 2639.27 Myr, wall clock time 2025-07-16 19:24:28 UTC
+system_dt: 78.3509 Myr
+integration_dt: 78.3509 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999477
+
+Rc: 0.211248
+fraction of particles in core: 0.0731
+fraction of particles outside tidal radius = 178.381 pc: 0.0289
+r_0.01: 0.0948968, r_0.1: 0.243672, r_0.2: 0.352938, r_0.5: 0.746091, r_0.9: 2.32439
+
+cluster energy: -0.258925
+cluster virial ratio: 1.00094
+cluster L: 0.0163936, Lz: 0.0132149
+
+alpha: 0.617881, b: 0.498901
+fraction of particles included in setting up the SCF: 0.9765
+fraction of particles bound to the SCF: 0.9736
+=====================================================
+system_time: 2717.62 Myr, wall clock time 2025-07-16 19:31:01 UTC
+system_dt: 66.0037 Myr
+integration_dt: 66.0037 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999515
+
+Rc: 0.207922
+fraction of particles in core: 0.0736
+fraction of particles outside tidal radius = 138.244 pc: 0.0316
+r_0.01: 0.0950199, r_0.1: 0.240496, r_0.2: 0.349464, r_0.5: 0.745078, r_0.9: 2.33057
+
+cluster energy: -0.259806
+cluster virial ratio: 0.999609
+cluster L: 0.0154112, Lz: 0.0127464
+
+alpha: 0.62597, b: 0.495729
+fraction of particles included in setting up the SCF: 0.9745
+fraction of particles bound to the SCF: 0.9725
+=====================================================
+system_time: 2783.62 Myr, wall clock time 2025-07-16 19:37:11 UTC
+system_dt: 83.2812 Myr
+integration_dt: 83.2812 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.99914
+
+Rc: 0.202203
+fraction of particles in core: 0.0691
+fraction of particles outside tidal radius = 108.536 pc: 0.0376
+r_0.01: 0.0900631, r_0.1: 0.238198, r_0.2: 0.348264, r_0.5: 0.747038, r_0.9: 2.36548
+
+cluster energy: -0.259942
+cluster virial ratio: 0.995439
+cluster L: 0.0167581, Lz: 0.0133725
+
+alpha: 0.630173, b: 0.492901
+fraction of particles included in setting up the SCF: 0.9734
+fraction of particles bound to the SCF: 0.9704
+=====================================================
+system_time: 2866.9 Myr, wall clock time 2025-07-16 19:45:22 UTC
+system_dt: 61.2199 Myr
+integration_dt: 61.2199 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.99942
+
+Rc: 0.202021
+fraction of particles in core: 0.0699
+fraction of particles outside tidal radius = 125.746 pc: 0.0377
+r_0.01: 0.0959305, r_0.1: 0.240254, r_0.2: 0.346714, r_0.5: 0.750263, r_0.9: 2.36776
+
+cluster energy: -0.259887
+cluster virial ratio: 0.996333
+cluster L: 0.018953, Lz: 0.0145732
+
+alpha: 0.62771, b: 0.491771
+fraction of particles included in setting up the SCF: 0.9728
+fraction of particles bound to the SCF: 0.9664
+=====================================================
+system_time: 2928.12 Myr, wall clock time 2025-07-16 19:50:38 UTC
+system_dt: 79.3516 Myr
+integration_dt: 79.3516 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999314
+
+Rc: 0.193158
+fraction of particles in core: 0.068
+fraction of particles outside tidal radius = 158.695 pc: 0.0365
+r_0.01: 0.0877776, r_0.1: 0.233409, r_0.2: 0.343556, r_0.5: 0.728663, r_0.9: 2.48461
+
+cluster energy: -0.25897
+cluster virial ratio: 1.01054
+cluster L: 0.0212219, Lz: 0.0168149
+
+alpha: 0.631475, b: 0.478037
+fraction of particles included in setting up the SCF: 0.9737
+fraction of particles bound to the SCF: 0.9652
+=====================================================
+system_time: 3007.47 Myr, wall clock time 2025-07-16 19:57:27 UTC
+system_dt: 59.2573 Myr
+integration_dt: 59.2573 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999536
+
+Rc: 0.191536
+fraction of particles in core: 0.0647
+fraction of particles outside tidal radius = 195.931 pc: 0.0377
+r_0.01: 0.0892135, r_0.1: 0.234151, r_0.2: 0.339981, r_0.5: 0.738446, r_0.9: 2.47066
+
+cluster energy: -0.25997
+cluster virial ratio: 1.00073
+cluster L: 0.0229564, Lz: 0.0176637
+
+alpha: 0.630287, b: 0.480309
+fraction of particles included in setting up the SCF: 0.9752
+fraction of particles bound to the SCF: 0.9645
+=====================================================
+system_time: 3066.73 Myr, wall clock time 2025-07-16 20:02:08 UTC
+system_dt: 73.8331 Myr
+integration_dt: 73.8331 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999717
+
+Rc: 0.189716
+fraction of particles in core: 0.0669
+fraction of particles outside tidal radius = 214.506 pc: 0.038
+r_0.01: 0.0890475, r_0.1: 0.22894, r_0.2: 0.339459, r_0.5: 0.732151, r_0.9: 2.49326
+
+cluster energy: -0.260652
+cluster virial ratio: 1.00178
+cluster L: 0.0211617, Lz: 0.0162526
+
+alpha: 0.644059, b: 0.474608
+fraction of particles included in setting up the SCF: 0.9763
+fraction of particles bound to the SCF: 0.9639
+=====================================================
+system_time: 3140.56 Myr, wall clock time 2025-07-16 20:08:00 UTC
+system_dt: 61.6898 Myr
+integration_dt: 61.6898 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999593
+
+Rc: 0.188834
+fraction of particles in core: 0.0674
+fraction of particles outside tidal radius = 223.371 pc: 0.0385
+r_0.01: 0.0949524, r_0.1: 0.227778, r_0.2: 0.340932, r_0.5: 0.738329, r_0.9: 2.52683
+
+cluster energy: -0.262377
+cluster virial ratio: 0.995563
+cluster L: 0.0195914, Lz: 0.0153758
+
+alpha: 0.635863, b: 0.477638
+fraction of particles included in setting up the SCF: 0.9747
+fraction of particles bound to the SCF: 0.9633
+=====================================================
+system_time: 3202.25 Myr, wall clock time 2025-07-16 20:12:56 UTC
+system_dt: 76.9665 Myr
+integration_dt: 76.9665 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999702
+
+Rc: 0.180561
+fraction of particles in core: 0.0636
+fraction of particles outside tidal radius = 219.536 pc: 0.0393
+r_0.01: 0.0803897, r_0.1: 0.225522, r_0.2: 0.337121, r_0.5: 0.743608, r_0.9: 2.50901
+
+cluster energy: -0.260188
+cluster virial ratio: 1.00552
+cluster L: 0.017664, Lz: 0.0138555
+
+alpha: 0.657166, b: 0.469735
+fraction of particles included in setting up the SCF: 0.9703
+fraction of particles bound to the SCF: 0.9625
+=====================================================
+system_time: 3279.22 Myr, wall clock time 2025-07-16 20:19:18 UTC
+system_dt: 51.1631 Myr
+integration_dt: 51.1631 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999324
+
+Rc: 0.166047
+fraction of particles in core: 0.0561
+fraction of particles outside tidal radius = 202.871 pc: 0.0403
+r_0.01: 0.0787218, r_0.1: 0.226019, r_0.2: 0.336365, r_0.5: 0.727473, r_0.9: 2.54106
+
+cluster energy: -0.261154
+cluster virial ratio: 1.0046
+cluster L: 0.0203335, Lz: 0.0154435
+
+alpha: 0.652769, b: 0.468075
+fraction of particles included in setting up the SCF: 0.9661
+fraction of particles bound to the SCF: 0.9622
+=====================================================
+system_time: 3330.38 Myr, wall clock time 2025-07-16 20:23:45 UTC
+system_dt: 50.4676 Myr
+integration_dt: 50.4676 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999542
+
+Rc: 0.172729
+fraction of particles in core: 0.0608
+fraction of particles outside tidal radius = 184.761 pc: 0.0413
+r_0.01: 0.0847184, r_0.1: 0.222908, r_0.2: 0.335674, r_0.5: 0.730023, r_0.9: 2.60259
+
+cluster energy: -0.26108
+cluster virial ratio: 1.00682
+cluster L: 0.0198233, Lz: 0.0143084
+
+alpha: 0.650296, b: 0.463454
+fraction of particles included in setting up the SCF: 0.9641
+fraction of particles bound to the SCF: 0.9617
+=====================================================
+system_time: 3380.85 Myr, wall clock time 2025-07-16 20:27:54 UTC
+system_dt: 38.0619 Myr
+integration_dt: 38.0619 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999403
+
+Rc: 0.17015
+fraction of particles in core: 0.0596
+fraction of particles outside tidal radius = 160.427 pc: 0.0428
+r_0.01: 0.0830668, r_0.1: 0.219083, r_0.2: 0.329994, r_0.5: 0.730836, r_0.9: 2.59458
+
+cluster energy: -0.262632
+cluster virial ratio: 1.00184
+cluster L: 0.0177745, Lz: 0.0127529
+
+alpha: 0.665917, b: 0.457723
+fraction of particles included in setting up the SCF: 0.9629
+fraction of particles bound to the SCF: 0.9607
+=====================================================
+system_time: 3418.91 Myr, wall clock time 2025-07-16 20:31:11 UTC
+system_dt: 53.6486 Myr
+integration_dt: 53.6486 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999586
+
+Rc: 0.163648
+fraction of particles in core: 0.0597
+fraction of particles outside tidal radius = 137.359 pc: 0.0453
+r_0.01: 0.0787934, r_0.1: 0.218435, r_0.2: 0.329582, r_0.5: 0.740718, r_0.9: 2.57783
+
+cluster energy: -0.262345
+cluster virial ratio: 0.998245
+cluster L: 0.0183293, Lz: 0.0135777
+
+alpha: 0.67983, b: 0.457106
+fraction of particles included in setting up the SCF: 0.9621
+fraction of particles bound to the SCF: 0.9603
+=====================================================
+system_time: 3472.56 Myr, wall clock time 2025-07-16 20:36:19 UTC
+system_dt: 48.8013 Myr
+integration_dt: 48.8013 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999582
+
+Rc: 0.165998
+fraction of particles in core: 0.0586
+fraction of particles outside tidal radius = 110.025 pc: 0.0514
+r_0.01: 0.0860803, r_0.1: 0.21985, r_0.2: 0.326481, r_0.5: 0.741143, r_0.9: 2.60917
+
+cluster energy: -0.261277
+cluster virial ratio: 1.00402
+cluster L: 0.0227111, Lz: 0.016703
+
+alpha: 0.670758, b: 0.457588
+fraction of particles included in setting up the SCF: 0.9611
+fraction of particles bound to the SCF: 0.9583
+=====================================================
+system_time: 3521.36 Myr, wall clock time 2025-07-16 20:41:13 UTC
+system_dt: 55.9247 Myr
+integration_dt: 55.9247 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999535
+
+Rc: 0.169354
+fraction of particles in core: 0.0613
+fraction of particles outside tidal radius = 108.094 pc: 0.0563
+r_0.01: 0.0801732, r_0.1: 0.214621, r_0.2: 0.322577, r_0.5: 0.731159, r_0.9: 2.65873
+
+cluster energy: -0.260066
+cluster virial ratio: 1.01509
+cluster L: 0.0238783, Lz: 0.0182816
+
+alpha: 0.668212, b: 0.448111
+fraction of particles included in setting up the SCF: 0.9606
+fraction of particles bound to the SCF: 0.9547
+=====================================================
+system_time: 3577.29 Myr, wall clock time 2025-07-16 20:46:53 UTC
+system_dt: 58.0259 Myr
+integration_dt: 58.0259 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999346
+
+Rc: 0.154521
+fraction of particles in core: 0.0496
+fraction of particles outside tidal radius = 131.578 pc: 0.054
+r_0.01: 0.0790234, r_0.1: 0.213088, r_0.2: 0.322621, r_0.5: 0.733288, r_0.9: 2.73547
+
+cluster energy: -0.262324
+cluster virial ratio: 0.998664
+cluster L: 0.0242124, Lz: 0.0188282
+
+alpha: 0.677122, b: 0.44953
+fraction of particles included in setting up the SCF: 0.9609
+fraction of particles bound to the SCF: 0.9517
+=====================================================
+system_time: 3635.31 Myr, wall clock time 2025-07-16 20:52:08 UTC
+system_dt: 35.1718 Myr
+integration_dt: 35.1718 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999676
+
+Rc: 0.165739
+fraction of particles in core: 0.0556
+fraction of particles outside tidal radius = 159.84 pc: 0.0544
+r_0.01: 0.0806017, r_0.1: 0.216911, r_0.2: 0.31923, r_0.5: 0.74218, r_0.9: 2.7465
+
+cluster energy: -0.262105
+cluster virial ratio: 0.991058
+cluster L: 0.0261448, Lz: 0.0202241
+
+alpha: 0.669019, b: 0.452826
+fraction of particles included in setting up the SCF: 0.9616
+fraction of particles bound to the SCF: 0.9501
+=====================================================
+system_time: 3670.48 Myr, wall clock time 2025-07-16 20:55:18 UTC
+system_dt: 52.926 Myr
+integration_dt: 52.926 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999379
+
+Rc: 0.170383
+fraction of particles in core: 0.0611
+fraction of particles outside tidal radius = 174.185 pc: 0.0548
+r_0.01: 0.0835721, r_0.1: 0.214573, r_0.2: 0.317233, r_0.5: 0.73899, r_0.9: 2.78374
+
+cluster energy: -0.262869
+cluster virial ratio: 0.989901
+cluster L: 0.0269191, Lz: 0.0209088
+
+alpha: 0.672782, b: 0.447478
+fraction of particles included in setting up the SCF: 0.9623
+fraction of particles bound to the SCF: 0.9497
+=====================================================
+system_time: 3723.41 Myr, wall clock time 2025-07-16 20:59:44 UTC
+system_dt: 44.1533 Myr
+integration_dt: 44.1533 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999586
+
+Rc: 0.166831
+fraction of particles in core: 0.0601
+fraction of particles outside tidal radius = 191.365 pc: 0.0543
+r_0.01: 0.0837277, r_0.1: 0.213246, r_0.2: 0.314952, r_0.5: 0.732495, r_0.9: 2.78345
+
+cluster energy: -0.26247
+cluster virial ratio: 0.998071
+cluster L: 0.0254018, Lz: 0.0194304
+
+alpha: 0.672502, b: 0.443015
+fraction of particles included in setting up the SCF: 0.9628
+fraction of particles bound to the SCF: 0.9486
+=====================================================
+system_time: 3767.56 Myr, wall clock time 2025-07-16 21:03:27 UTC
+system_dt: 47.5242 Myr
+integration_dt: 47.5242 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.99976
+
+Rc: 0.166681
+fraction of particles in core: 0.0614
+fraction of particles outside tidal radius = 201.303 pc: 0.0549
+r_0.01: 0.0802247, r_0.1: 0.211726, r_0.2: 0.3175, r_0.5: 0.735774, r_0.9: 2.75186
+
+cluster energy: -0.26324
+cluster virial ratio: 0.993157
+cluster L: 0.0259546, Lz: 0.0204503
+
+alpha: 0.678276, b: 0.441927
+fraction of particles included in setting up the SCF: 0.9627
+fraction of particles bound to the SCF: 0.948
+=====================================================
+system_time: 3815.09 Myr, wall clock time 2025-07-16 21:07:21 UTC
+system_dt: 55.0114 Myr
+integration_dt: 55.0114 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999743
+
+Rc: 0.166894
+fraction of particles in core: 0.0583
+fraction of particles outside tidal radius = 207.314 pc: 0.0558
+r_0.01: 0.0813814, r_0.1: 0.212111, r_0.2: 0.315248, r_0.5: 0.72888, r_0.9: 2.87344
+
+cluster energy: -0.263386
+cluster virial ratio: 0.992908
+cluster L: 0.0247935, Lz: 0.0194236
+
+alpha: 0.672836, b: 0.440213
+fraction of particles included in setting up the SCF: 0.9612
+fraction of particles bound to the SCF: 0.9473
+=====================================================
+system_time: 3870.1 Myr, wall clock time 2025-07-16 21:11:24 UTC
+system_dt: 65.8251 Myr
+integration_dt: 65.8251 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999652
+
+Rc: 0.166631
+fraction of particles in core: 0.0611
+fraction of particles outside tidal radius = 208.654 pc: 0.0567
+r_0.01: 0.0817593, r_0.1: 0.209541, r_0.2: 0.313182, r_0.5: 0.727521, r_0.9: 2.887
+
+cluster energy: -0.262204
+cluster virial ratio: 1.00173
+cluster L: 0.023988, Lz: 0.0191891
+
+alpha: 0.67665, b: 0.436298
+fraction of particles included in setting up the SCF: 0.9574
+fraction of particles bound to the SCF: 0.9464
+=====================================================
+system_time: 3935.92 Myr, wall clock time 2025-07-16 21:16:36 UTC
+system_dt: 38.6695 Myr
+integration_dt: 38.6695 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999623
+
+Rc: 0.165219
+fraction of particles in core: 0.0611
+fraction of particles outside tidal radius = 201.192 pc: 0.0576
+r_0.01: 0.0803332, r_0.1: 0.207261, r_0.2: 0.309691, r_0.5: 0.714657, r_0.9: 2.91654
+
+cluster energy: -0.262245
+cluster virial ratio: 1.0095
+cluster L: 0.0217534, Lz: 0.0169199
+
+alpha: 0.67551, b: 0.428961
+fraction of particles included in setting up the SCF: 0.9513
+fraction of particles bound to the SCF: 0.9453
+=====================================================
+system_time: 3974.59 Myr, wall clock time 2025-07-16 21:19:44 UTC
+system_dt: 42.2663 Myr
+integration_dt: 42.2663 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999673
+
+Rc: 0.162138
+fraction of particles in core: 0.0597
+fraction of particles outside tidal radius = 192.065 pc: 0.0581
+r_0.01: 0.0758372, r_0.1: 0.202714, r_0.2: 0.30968, r_0.5: 0.728036, r_0.9: 2.91875
+
+cluster energy: -0.261069
+cluster virial ratio: 1.00594
+cluster L: 0.022229, Lz: 0.0167424
+
+alpha: 0.691433, b: 0.426955
+fraction of particles included in setting up the SCF: 0.9501
+fraction of particles bound to the SCF: 0.945
+=====================================================
+system_time: 4016.86 Myr, wall clock time 2025-07-16 21:23:04 UTC
+system_dt: 49.0624 Myr
+integration_dt: 49.0624 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999733
+
+Rc: 0.159883
+fraction of particles in core: 0.0582
+fraction of particles outside tidal radius = 178.049 pc: 0.0595
+r_0.01: 0.0771484, r_0.1: 0.207875, r_0.2: 0.314345, r_0.5: 0.739912, r_0.9: 2.91376
+
+cluster energy: -0.2666
+cluster virial ratio: 0.979931
+cluster L: 0.0207739, Lz: 0.0155186
+
+alpha: 0.690038, b: 0.43631
+fraction of particles included in setting up the SCF: 0.9487
+fraction of particles bound to the SCF: 0.9441
+=====================================================
+system_time: 4065.92 Myr, wall clock time 2025-07-16 21:27:20 UTC
+system_dt: 45.0489 Myr
+integration_dt: 45.0489 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999601
+
+Rc: 0.158364
+fraction of particles in core: 0.0586
+fraction of particles outside tidal radius = 157.494 pc: 0.0608
+r_0.01: 0.079876, r_0.1: 0.201793, r_0.2: 0.305185, r_0.5: 0.715405, r_0.9: 2.97035
+
+cluster energy: -0.263441
+cluster virial ratio: 1.00817
+cluster L: 0.0192899, Lz: 0.014793
+
+alpha: 0.683834, b: 0.42272
+fraction of particles included in setting up the SCF: 0.947
+fraction of particles bound to the SCF: 0.943
+=====================================================
+system_time: 4110.97 Myr, wall clock time 2025-07-16 21:31:35 UTC
+system_dt: 39.0655 Myr
+integration_dt: 39.0655 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999089
+
+Rc: 0.152831
+fraction of particles in core: 0.0531
+fraction of particles outside tidal radius = 137.666 pc: 0.0633
+r_0.01: 0.0786657, r_0.1: 0.205985, r_0.2: 0.311244, r_0.5: 0.718351, r_0.9: 2.97396
+
+cluster energy: -0.265256
+cluster virial ratio: 0.995104
+cluster L: 0.0191674, Lz: 0.0145582
+
+alpha: 0.679367, b: 0.429697
+fraction of particles included in setting up the SCF: 0.9455
+fraction of particles bound to the SCF: 0.9422
+=====================================================
+system_time: 4150.04 Myr, wall clock time 2025-07-16 21:35:19 UTC
+system_dt: 60.1416 Myr
+integration_dt: 60.1416 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999471
+
+Rc: 0.160153
+fraction of particles in core: 0.0582
+fraction of particles outside tidal radius = 122.62 pc: 0.0656
+r_0.01: 0.0784994, r_0.1: 0.20849, r_0.2: 0.314511, r_0.5: 0.718988, r_0.9: 2.92022
+
+cluster energy: -0.265327
+cluster virial ratio: 0.990319
+cluster L: 0.0212107, Lz: 0.016392
+
+alpha: 0.676176, b: 0.431308
+fraction of particles included in setting up the SCF: 0.9439
+fraction of particles bound to the SCF: 0.9407
+=====================================================
+system_time: 4210.18 Myr, wall clock time 2025-07-16 21:41:12 UTC
+system_dt: 57.8814 Myr
+integration_dt: 57.8814 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999586
+
+Rc: 0.15611
+fraction of particles in core: 0.0578
+fraction of particles outside tidal radius = 110.386 pc: 0.072
+r_0.01: 0.0785729, r_0.1: 0.202016, r_0.2: 0.304389, r_0.5: 0.71128, r_0.9: 3.01982
+
+cluster energy: -0.26611
+cluster virial ratio: 0.997961
+cluster L: 0.0252535, Lz: 0.0190529
+
+alpha: 0.68456, b: 0.420665
+fraction of particles included in setting up the SCF: 0.9431
+fraction of particles bound to the SCF: 0.9375
+=====================================================
+system_time: 4268.06 Myr, wall clock time 2025-07-16 21:46:47 UTC
+system_dt: 44.3922 Myr
+integration_dt: 44.3922 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999311
+
+Rc: 0.155032
+fraction of particles in core: 0.0573
+fraction of particles outside tidal radius = 134.137 pc: 0.0712
+r_0.01: 0.074299, r_0.1: 0.200443, r_0.2: 0.30234, r_0.5: 0.707094, r_0.9: 3.1731
+
+cluster energy: -0.265625
+cluster virial ratio: 0.998029
+cluster L: 0.0262297, Lz: 0.0193525
+
+alpha: 0.690985, b: 0.416138
+fraction of particles included in setting up the SCF: 0.9435
+fraction of particles bound to the SCF: 0.9341
+=====================================================
+system_time: 4312.45 Myr, wall clock time 2025-07-16 21:50:58 UTC
+system_dt: 57.4313 Myr
+integration_dt: 57.4313 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999452
+
+Rc: 0.14813
+fraction of particles in core: 0.0569
+fraction of particles outside tidal radius = 157.79 pc: 0.0707
+r_0.01: 0.0765621, r_0.1: 0.197346, r_0.2: 0.301771, r_0.5: 0.712459, r_0.9: 3.27306
+
+cluster energy: -0.26657
+cluster virial ratio: 0.990445
+cluster L: 0.0270251, Lz: 0.0208496
+
+alpha: 0.699858, b: 0.41179
+fraction of particles included in setting up the SCF: 0.9443
+fraction of particles bound to the SCF: 0.9329
+=====================================================
+system_time: 4369.88 Myr, wall clock time 2025-07-16 21:55:48 UTC
+system_dt: 34.157 Myr
+integration_dt: 34.157 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999685
+
+Rc: 0.142698
+fraction of particles in core: 0.0526
+fraction of particles outside tidal radius = 180.564 pc: 0.0717
+r_0.01: 0.0711834, r_0.1: 0.195542, r_0.2: 0.297401, r_0.5: 0.72006, r_0.9: 3.27906
+
+cluster energy: -0.265985
+cluster virial ratio: 0.994104
+cluster L: 0.0248159, Lz: 0.0196314
+
+alpha: 0.710556, b: 0.409143
+fraction of particles included in setting up the SCF: 0.9451
+fraction of particles bound to the SCF: 0.9316
+=====================================================
+system_time: 4404.04 Myr, wall clock time 2025-07-16 21:58:50 UTC
+system_dt: 40.0224 Myr
+integration_dt: 40.0224 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999609
+
+Rc: 0.147703
+fraction of particles in core: 0.0569
+fraction of particles outside tidal radius = 189.158 pc: 0.0717
+r_0.01: 0.0738255, r_0.1: 0.195588, r_0.2: 0.296806, r_0.5: 0.696994, r_0.9: 3.25872
+
+cluster energy: -0.266436
+cluster virial ratio: 1.00326
+cluster L: 0.0257882, Lz: 0.020415
+
+alpha: 0.69491, b: 0.405477
+fraction of particles included in setting up the SCF: 0.9458
+fraction of particles bound to the SCF: 0.9308
+=====================================================
+system_time: 4444.06 Myr, wall clock time 2025-07-16 22:02:13 UTC
+system_dt: 42.8709 Myr
+integration_dt: 42.8709 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999721
+
+Rc: 0.145644
+fraction of particles in core: 0.0565
+fraction of particles outside tidal radius = 195.356 pc: 0.0724
+r_0.01: 0.0727038, r_0.1: 0.195647, r_0.2: 0.292405, r_0.5: 0.712035, r_0.9: 3.31067
+
+cluster energy: -0.267206
+cluster virial ratio: 0.998671
+cluster L: 0.025971, Lz: 0.0202175
+
+alpha: 0.708441, b: 0.402293
+fraction of particles included in setting up the SCF: 0.9464
+fraction of particles bound to the SCF: 0.9302
+=====================================================
+system_time: 4486.93 Myr, wall clock time 2025-07-16 22:05:40 UTC
+system_dt: 39.4061 Myr
+integration_dt: 39.4061 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.99967
+
+Rc: 0.145202
+fraction of particles in core: 0.058
+fraction of particles outside tidal radius = 198.482 pc: 0.0728
+r_0.01: 0.0706061, r_0.1: 0.193665, r_0.2: 0.29652, r_0.5: 0.695268, r_0.9: 3.34116
+
+cluster energy: -0.265943
+cluster virial ratio: 1.00153
+cluster L: 0.0262116, Lz: 0.0206094
+
+alpha: 0.702221, b: 0.402508
+fraction of particles included in setting up the SCF: 0.9456
+fraction of particles bound to the SCF: 0.9296
+=====================================================
+system_time: 4526.34 Myr, wall clock time 2025-07-16 22:09:12 UTC
+system_dt: 40.3007 Myr
+integration_dt: 40.3007 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999637
+
+Rc: 0.142948
+fraction of particles in core: 0.056
+fraction of particles outside tidal radius = 198.713 pc: 0.0729
+r_0.01: 0.0723344, r_0.1: 0.194014, r_0.2: 0.294189, r_0.5: 0.703037, r_0.9: 3.41327
+
+cluster energy: -0.266259
+cluster virial ratio: 1.00557
+cluster L: 0.0267134, Lz: 0.0212589
+
+alpha: 0.70504, b: 0.399657
+fraction of particles included in setting up the SCF: 0.9431
+fraction of particles bound to the SCF: 0.9293
+=====================================================
+system_time: 4566.64 Myr, wall clock time 2025-07-16 22:12:37 UTC
+system_dt: 31.433 Myr
+integration_dt: 31.433 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999636
+
+Rc: 0.142696
+fraction of particles in core: 0.0536
+fraction of particles outside tidal radius = 196.591 pc: 0.0732
+r_0.01: 0.0720261, r_0.1: 0.192471, r_0.2: 0.290555, r_0.5: 0.693639, r_0.9: 3.40466
+
+cluster energy: -0.267284
+cluster virial ratio: 1.00337
+cluster L: 0.0266224, Lz: 0.0206097
+
+alpha: 0.704367, b: 0.394644
+fraction of particles included in setting up the SCF: 0.9393
+fraction of particles bound to the SCF: 0.929
+=====================================================
+system_time: 4598.07 Myr, wall clock time 2025-07-16 22:15:20 UTC
+system_dt: 47.8577 Myr
+integration_dt: 47.8577 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999719
+
+Rc: 0.142542
+fraction of particles in core: 0.0536
+fraction of particles outside tidal radius = 193.316 pc: 0.0738
+r_0.01: 0.0702844, r_0.1: 0.188164, r_0.2: 0.288452, r_0.5: 0.698179, r_0.9: 3.34451
+
+cluster energy: -0.265624
+cluster virial ratio: 1.01128
+cluster L: 0.0254657, Lz: 0.0198971
+
+alpha: 0.70429, b: 0.394384
+fraction of particles included in setting up the SCF: 0.9364
+fraction of particles bound to the SCF: 0.9287
+=====================================================
+system_time: 4645.93 Myr, wall clock time 2025-07-16 22:19:26 UTC
+system_dt: 46.9611 Myr
+integration_dt: 46.9611 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999585
+
+Rc: 0.144547
+fraction of particles in core: 0.0556
+fraction of particles outside tidal radius = 185.465 pc: 0.0746
+r_0.01: 0.0726742, r_0.1: 0.189263, r_0.2: 0.28605, r_0.5: 0.703358, r_0.9: 3.51126
+
+cluster energy: -0.26613
+cluster virial ratio: 1.00536
+cluster L: 0.0231564, Lz: 0.0182149
+
+alpha: 0.709203, b: 0.392072
+fraction of particles included in setting up the SCF: 0.9328
+fraction of particles bound to the SCF: 0.9279
+=====================================================
+system_time: 4692.89 Myr, wall clock time 2025-07-16 22:23:23 UTC
+system_dt: 44.8752 Myr
+integration_dt: 44.8752 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999659
+
+Rc: 0.143479
+fraction of particles in core: 0.0587
+fraction of particles outside tidal radius = 173.884 pc: 0.0758
+r_0.01: 0.0709421, r_0.1: 0.186429, r_0.2: 0.288796, r_0.5: 0.704677, r_0.9: 3.45532
+
+cluster energy: -0.267225
+cluster virial ratio: 0.999226
+cluster L: 0.0223004, Lz: 0.0171789
+
+alpha: 0.720586, b: 0.390559
+fraction of particles included in setting up the SCF: 0.9309
+fraction of particles bound to the SCF: 0.9275
+=====================================================
+system_time: 4737.77 Myr, wall clock time 2025-07-16 22:27:24 UTC
+system_dt: 34.4674 Myr
+integration_dt: 34.4674 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999281
+
+Rc: 0.139069
+fraction of particles in core: 0.0547
+fraction of particles outside tidal radius = 158.46 pc: 0.0768
+r_0.01: 0.0680976, r_0.1: 0.187744, r_0.2: 0.285525, r_0.5: 0.70637, r_0.9: 3.5456
+
+cluster energy: -0.268332
+cluster virial ratio: 1.00372
+cluster L: 0.0217995, Lz: 0.0169542
+
+alpha: 0.716342, b: 0.386045
+fraction of particles included in setting up the SCF: 0.9296
+fraction of particles bound to the SCF: 0.9268
+=====================================================
+system_time: 4772.23 Myr, wall clock time 2025-07-16 22:30:39 UTC
+system_dt: 34.8243 Myr
+integration_dt: 34.8243 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999575
+
+Rc: 0.141729
+fraction of particles in core: 0.055
+fraction of particles outside tidal radius = 143.366 pc: 0.0792
+r_0.01: 0.0668507, r_0.1: 0.18811, r_0.2: 0.280202, r_0.5: 0.719428, r_0.9: 3.62212
+
+cluster energy: -0.269235
+cluster virial ratio: 0.994743
+cluster L: 0.0225941, Lz: 0.0174029
+
+alpha: 0.723893, b: 0.38622
+fraction of particles included in setting up the SCF: 0.929
+fraction of particles bound to the SCF: 0.9263
+=====================================================
+system_time: 4807.06 Myr, wall clock time 2025-07-16 22:33:53 UTC
+system_dt: 37.4743 Myr
+integration_dt: 37.4743 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999557
+
+Rc: 0.141295
+fraction of particles in core: 0.0556
+fraction of particles outside tidal radius = 126.256 pc: 0.0822
+r_0.01: 0.0700206, r_0.1: 0.188173, r_0.2: 0.280501, r_0.5: 0.704071, r_0.9: 3.57954
+
+cluster energy: -0.26864
+cluster virial ratio: 1.00293
+cluster L: 0.0231913, Lz: 0.0170349
+
+alpha: 0.714445, b: 0.386347
+fraction of particles included in setting up the SCF: 0.9279
+fraction of particles bound to the SCF: 0.925
+=====================================================
+system_time: 4844.53 Myr, wall clock time 2025-07-16 22:37:41 UTC
+system_dt: 28.37 Myr
+integration_dt: 28.37 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999293
+
+Rc: 0.146304
+fraction of particles in core: 0.0591
+fraction of particles outside tidal radius = 109.579 pc: 0.0888
+r_0.01: 0.0697417, r_0.1: 0.186773, r_0.2: 0.280173, r_0.5: 0.690207, r_0.9: 3.6384
+
+cluster energy: -0.269174
+cluster virial ratio: 1.00365
+cluster L: 0.0246147, Lz: 0.0178249
+
+alpha: 0.705721, b: 0.384801
+fraction of particles included in setting up the SCF: 0.9268
+fraction of particles bound to the SCF: 0.9235
+=====================================================
+system_time: 4872.9 Myr, wall clock time 2025-07-16 22:40:52 UTC
+system_dt: 46.2159 Myr
+integration_dt: 46.2159 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999235
+
+Rc: 0.142209
+fraction of particles in core: 0.0558
+fraction of particles outside tidal radius = 105.632 pc: 0.0917
+r_0.01: 0.0728263, r_0.1: 0.188284, r_0.2: 0.282349, r_0.5: 0.705542, r_0.9: 3.68887
+
+cluster energy: -0.268669
+cluster virial ratio: 0.997611
+cluster L: 0.0256156, Lz: 0.0185238
+
+alpha: 0.708318, b: 0.38727
+fraction of particles included in setting up the SCF: 0.9264
+fraction of particles bound to the SCF: 0.9212
+=====================================================
+system_time: 4919.12 Myr, wall clock time 2025-07-16 22:45:36 UTC
+system_dt: 44.766 Myr
+integration_dt: 44.766 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999477
+
+Rc: 0.142429
+fraction of particles in core: 0.0577
+fraction of particles outside tidal radius = 121.11 pc: 0.089
+r_0.01: 0.0723682, r_0.1: 0.183694, r_0.2: 0.277912, r_0.5: 0.68986, r_0.9: 3.85134
+
+cluster energy: -0.268961
+cluster virial ratio: 1.00254
+cluster L: 0.0291196, Lz: 0.0220835
+
+alpha: 0.714242, b: 0.379579
+fraction of particles included in setting up the SCF: 0.9263
+fraction of particles bound to the SCF: 0.9182
+=====================================================
+system_time: 4963.89 Myr, wall clock time 2025-07-16 22:49:55 UTC
+system_dt: 41.4596 Myr
+integration_dt: 41.4596 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999043
+
+Rc: 0.135034
+fraction of particles in core: 0.0521
+fraction of particles outside tidal radius = 146.984 pc: 0.0885
+r_0.01: 0.0668054, r_0.1: 0.185149, r_0.2: 0.281078, r_0.5: 0.698809, r_0.9: 4.24742
+
+cluster energy: -0.270377
+cluster virial ratio: 0.993465
+cluster L: 0.032197, Lz: 0.0242021
+
+alpha: 0.716853, b: 0.379032
+fraction of particles included in setting up the SCF: 0.9269
+fraction of particles bound to the SCF: 0.9166
+number of iterations: 657, simulation ended with system_time: 871.175
+=====================================================
+system_time: 5000 Myr, wall clock time 2025-07-16 22:53:13 UTC
+system_dt: 41.4596 Myr
+integration_dt: 4.57674 Myr
+
+sum_n a_n00^2 / sum_nlm a_nlm^2: 0.999043
+
+Rc: 0.138041
+fraction of particles in core: 0.0535
+fraction of particles outside tidal radius = 163.347 pc: 0.0892
+r_0.01: 0.0690322, r_0.1: 0.182957, r_0.2: 0.277428, r_0.5: 0.689581, r_0.9: 4.48841
+
+cluster energy: -0.27132
+cluster virial ratio: 0.988963
+cluster L: 0.0323517, Lz: 0.0239455
+
+alpha: 0.716853, b: 0.379032
+fraction of particles included in setting up the SCF: 0.9275
+fraction of particles bound to the SCF: 0.9156
+simulation took 24751.1 seconds
